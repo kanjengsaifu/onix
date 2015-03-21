@@ -1,0 +1,865 @@
+
+var link = "http://localhost/psdg/analisis/";
+var base_url = "http://localhost/psdg/";
+
+    // var link = "http://192.168.1.14/psdg/analisis/";
+    // var base_url = "http://192.168.1.14/psdg/";
+
+    /**
+     * Lokasi
+     */
+
+    function kab(prov) {
+        $.getJSON(base_url + 'lokasi/kabupaten_by_provinsi/' + prov, {}, function(json) {
+            if(json == false) {
+                $('#lokasi')
+                    .find('option')
+                    .remove()
+                    .end()
+                    .append('<option value="">--Kota--</option>')
+                    .val('');
+            }
+            else {
+                $('#lokasi')
+                    .find('option')
+                    .remove()
+                    .end()
+                    .append('<option value="">--Kota--</option>')
+                    .val('');
+
+                $.each(json, function(key, value) {
+                    $('#lokasi')
+                        .append($("<option></option>")
+                        .attr("value", value.id_kabupaten)
+                        .text(value.nama));
+                });
+            }
+        });
+    }
+
+    function refresh_harga()
+    {
+        var param = [];
+        $("input:checkbox[id=param]:checked").each(function(){
+            param.push($(this).val());
+        });
+
+        var jumlah_conto = $('#jumlah').val();
+        $.ajax({
+            url: base_url + 'parameter/jumlah_harga',
+            type: 'post',
+            data: {
+                param: param,
+                jumlah: jumlah_conto
+            },
+            dataType: 'json',
+            success: function(json) {
+                if(json.harga == 0)
+                    $('#harga').hide();
+                else
+                {
+                    if($('#nama').val().substr(0,1) == 'p') {
+                        $('#harga').show();
+                        $('#harga').text(json.harga);
+                    }
+                }
+            }
+        });
+    }
+
+    $('#tanggal_masuk').datepicker({
+        show: true,
+        format: 'yyyy-mm-dd'
+    })
+
+    $('#btn-add-nama').click(function() {
+        $('#modal-nama-batuan').modal('show');
+    });
+
+    $('#btn-add-berat').click(function() {
+        $('#modal-berat').modal('show');
+    });
+
+    $('#btn-add-gambar').click(function() {
+        $('#modal-gambar').modal('show');
+    });
+
+    function show_gambar(img, deskripsi) {
+        console.log(img);
+        $('#modal-lihat-gambar').modal('show');
+        $('#gambar-modal').html("<img src='"+ img  +"' class='img-responsive'>");
+        $('#deskripsi').text(deskripsi);
+
+    };
+
+    function set_biaya(pemohon) {
+        if(pemohon.substr(0, 1) == 'k') {
+            $('#biaya').val('0');
+        }
+    }
+
+    function tambah_conto(no_analisis) {
+
+        var p = confirm('Apakah anda yakin ingin akan menganalisis conto baru ?');
+        if(p == false)
+            return false;
+
+        $.ajax({
+            url: link + 'tambah_conto',
+            type: 'post',
+            data: {
+                no_analisis: no_analisis
+            },
+            dataType: 'json',
+            beforeSend: function() {
+                $('#status-tambah-conto').text('Tunggu Sebentar...');
+            },
+            success: function(json) {
+                $('#status-tambah-conto').text('');
+                var title_notif = json.status == true ? 'Berhasil!' : 'Gagal!';
+                $.gritter.add({
+                    // (string | mandatory) the heading of the notification
+                    title: title_notif,
+                    // (string | mandatory) the text inside the notification
+                    text: json.pesan,
+                    time: 3000,
+                    after_open: function(e) {
+                        if(json.status == true)
+                            location.reload();
+                    }
+                });
+            }
+        })
+    }
+
+    $('#btn-tambah-conto-fisika').click(function() {
+        var p = confirm('Apakah anda yakin ingin akan menganalisis conto baru ?');
+        if(p == false)
+            return false;
+
+
+    });
+
+    function show_param(id_param, nama) {
+        var nilai = $('#nilai_'+id_param).val();
+        $('#title-param').html(nama_kimia(nama));
+        $('#nama-param').val(nama);
+        $('#id-param').val(id_param);
+        $('#input-param').val(nilai);
+        $('#modal-param').modal('show');
+    }
+
+    function show_catatan(id_param, nama) {
+        var catatan = ($('#catatan_'+id_param).html());
+        $('#title-param-catatan').html(nama_kimia(nama));
+        $('#nama-param-catatan').val(nama);
+        $('#id-param-catatan').val(id_param);
+        $('#input-catatan').val(catatan);
+        $('#modal-catatan').modal('show');
+    }
+
+    function isi_parameter() {
+        var id_proses = $('input[name=id_proses]').val();
+        var id_param = $('input[name=id_param]').val();
+        var nilai = $('input[name=nilai_param]').val();
+        var nama = $('input[name=nama_param]').val();
+        var satuan = $('select[name=satuan]').val();
+
+        $.ajax({
+            url: link + 'simpan_nilai',
+            type: 'post',
+            data: {
+                param: id_param,
+                nilai: nilai,
+                id: id_proses,
+                nama: nama,
+                satuan: satuan
+            },
+            dataType: 'json',
+            success: function(json) {
+                if(json.status == true) {
+                    $('#modal-param').modal('hide');
+                    $('#nilai_'+id_param).val(nilai);
+                    $('#t_nilai_'+id_param).text(nilai);
+                    $('#t_satuan_'+id_param).text(satuan);
+                };
+
+                var title_notif = json.status == true ? 'Berhasil!' : 'Gagal!';
+                $.gritter.add({
+                    // (string | mandatory) the heading of the notification
+                    title: title_notif,
+                    // (string | mandatory) the text inside the notification
+                    text: json.pesan,
+                    time: 3000
+                });
+
+            }
+        })
+    }
+
+    function isi_catatan() {
+        var id_proses = $('input[name=id_proses]').val();
+        var id_param = $('input[name=id_param_catatan]').val();
+        var catatan = $('textarea[name=catatan]').val();
+        var nama = $('input[name=nama_param_catatan]').val();
+
+        $.ajax({
+            url: link + 'simpan_catatan',
+            type: 'post',
+            data: {
+                param: id_param,
+                catatan: catatan,
+                id: id_proses,
+                nama: nama
+            },
+            dataType: 'json',
+            success: function(json) {
+                if(json.status == true) {
+                    $('#modal-catatan').modal('hide');
+                    $('#catatan_'+id_param).html(catatan);
+                };
+
+                var title_notif = json.status == true ? 'Berhasil!' : 'Gagal!';
+                $.gritter.add({
+                    // (string | mandatory) the heading of the notification
+                    title: title_notif,
+                    // (string | mandatory) the text inside the notification
+                    text: json.pesan,
+                    time: 3000
+                });
+
+            }
+        });
+    }
+
+    $('#btn-simpan-nama-batuan').click(function() {
+        var id_conto = $('input[name=id_proses]').val();
+        var nama = $('#input-nama-batuan').val();
+        var id_analisis = $('#id_analisis').val();
+
+        $.ajax({
+            url: link + 'simpan_nama_batuan',
+            type: 'post',
+            data: {
+                id: id_conto,
+                nama: nama
+            },
+            dataType: 'json',
+            success: function(json) {
+                var title_notif = json.status == true ? 'Berhasil!' : 'Gagal!';
+
+                if(json.status == true)
+                {
+                    window.location.href = link + 'isi/' + id_analisis + '/' + id_conto;
+                    return false;
+                }
+
+                $.gritter.add({
+                    // (string | mandatory) the heading of the notification
+                    title: title_notif,
+                    // (string | mandatory) the text inside the notification
+                    text: json.pesan,
+                    time: 3000
+                });
+
+            }
+        });
+    });
+
+    $('#btn-simpan-berat').click(function() {
+        var id_conto = $('input[name=id_proses]').val();
+        var berat = $('#input-berat').val();
+        var id_analisis = $('#id_analisis').val();
+
+        $.ajax({
+            url: link + 'simpan_berat',
+            type: 'post',
+            data: {
+                id: id_conto,
+                berat: berat
+            },
+            dataType: 'json',
+            success: function(json) {
+                var title_notif = json.status == true ? 'Berhasil!' : 'Gagal!';
+
+                if(json.status == true)
+                {
+                    window.location.href = link + 'isi/' + id_analisis + '/' + id_conto;
+                    return false;
+                }
+
+                $.gritter.add({
+                    // (string | mandatory) the heading of the notification
+                    title: title_notif,
+                    // (string | mandatory) the text inside the notification
+                    text: json.pesan,
+                    time: 3000
+                });
+
+            }
+        });
+    });
+
+    $('#btn_selesai_conto').click(function() {
+        var id_conto = $('#id_conto').val();
+        var id_analisis = $('#id_analisis').val();
+        var id_type = $('#id_type').val();
+
+        var p = confirm('Apakah anda yakin Selesai menganalisi conto ini ?');
+        if(p == false)
+            return false;
+
+        $.ajax({
+            url: link + 'selesai_analisis_conto',
+            type: 'post',
+            data: {
+                id_conto: id_conto,
+                id_type: id_type,
+                id_analisis: id_analisis
+            },
+            dataType: 'json',
+            success: function(json) {
+                var title_notif = json.status == true ? 'Berhasil!' : 'Gagal!';
+
+                if(json.status == true)
+                {
+                    if(json.is_fisika == false)
+                        window.location.href = link + 'detail/' + id_analisis;
+                    else
+                        window.location.href = base_url + 'fisika/detail/'+ id_analisis;
+
+                    return false;
+                }
+
+                $.gritter.add({
+                    // (string | mandatory) the heading of the notification
+                    title: title_notif,
+                    // (string | mandatory) the text inside the notification
+                    text: json.pesan,
+                    time: 3000
+                });
+
+            }
+        });
+    });
+
+    function selesai_analisis(id_analisis)
+    {
+        var p = confirm('Apakah anda yakin Selesai menganalisis ' + id_analisis +' ?');
+        if(p == false)
+            return false;
+
+        $.ajax({
+            url: link + 'selesai_analisis',
+            type: 'post',
+            data: {
+                id_analisis: id_analisis
+            },
+            dataType: 'json',
+            success: function(json) {
+                var title_notif = json.status == true ? 'Berhasil!' : 'Gagal!';
+
+                if(json.status == true)
+                {
+                    title_notif = 'Berhasil!'
+                    $('#'+id_analisis.toUpperCase() + ' .status').html("<div class='label label-success'>selesai <i class='glyphicon glyphicon-ok'></i> </div>");
+                    $('#'+id_analisis.toUpperCase() + ' button').hide('slow');
+
+                }
+                else
+                {
+                    title_notif = 'Gagal!';
+                }
+
+                $.gritter.add({
+                    // (string | mandatory) the heading of the notification
+                    title: title_notif,
+                    // (string | mandatory) the text inside the notification
+                    text: json.pesan,
+                    time: 3000
+                });
+
+                location.reload();
+
+            }
+        });
+    }
+
+    function reproses_analisis(id_analisis)
+    {
+        var p = confirm('Apakah anda yakin mengulang menganalisis ' + id_analisis +' ?');
+        if(p == false)
+            return false;
+
+        $.ajax({
+            url: link + 'reproses_analisis',
+            type: 'post',
+            data: {
+                id_analisis: id_analisis
+            },
+            dataType: 'json',
+            success: function(json) {
+                var title_notif = json.status == true ? 'Berhasil!' : 'Gagal!';
+
+                if(json.status == true)
+                {
+                    location.reload();
+                }
+                else
+                {
+                    title_notif = 'Gagal!';
+                }
+
+                $.gritter.add({
+                    // (string | mandatory) the heading of the notification
+                    title: title_notif,
+                    // (string | mandatory) the text inside the notification
+                    text: json.pesan,
+                    time: 3000
+                });
+
+            }
+        });
+    }
+
+    var bar = $('.progress-bar');
+    var percent = $('.percent');
+    $('.form-gambar').ajaxForm({
+        dataType: 'json',
+        beforeSend: function() {
+            var percentVal = '0%';
+            bar.width(percentVal)
+            percent.html(percentVal);
+            $('#gambar_conto').html("");
+        },
+        uploadProgress: function(event, position, total, percentComplete) {
+            var percentVal = percentComplete + '%';
+            bar.width(percentVal)
+            percent.html(percentVal);
+        },
+        success: function(json) {
+            var percentVal = '100%';
+            bar.width(percentVal);
+            percent.html(percentVal);
+            var container = json.pesan.id;
+            if(json.status == true) {
+                $('#btn-simpan-gambar').hide();
+                $('#btn-show-foto').removeAttr('DISABLED');
+//                $('#i_foto').hide();
+                var date = new Date();
+                $("#foto-"+container).html("<img src='"+ base_url +"assets/img/foto_conto/"+json.pesan.file+"?lastmod="+ date +"' class='img-responsive' id='gambar' onclick='show_gambar()'>");
+                $('#status-foto').text('Foto Sudah Ada');
+//                $('#btn-foto-group').appendChild('<button class="btn btn-xs btn-info"  id="btn-lihat-gambar" onclick="show_gambar()"><div class="glyphicon glyphicon-eye-open"></div></button> lihat foto');
+                $('#lihat-gambar-conto').html("<img src='"+ base_url +"assets/img/foto_conto/"+json.pesan.file+"?lastmod="+ date +"' id='gambar'>");
+                $.gritter.add({
+                    // (string | mandatory) the heading of the notification
+                    title: 'Berhasil!',
+                    // (string | mandatory) the text inside the notification
+                    text: 'Upload foto untuk conto: '+json.pesan.id_conto,
+                    time: 3000
+                });
+            }
+            else {
+                console.log(json.pesan);
+                $.gritter.add({
+                    // (string | mandatory) the heading of the notification
+                    title: 'Gagal!',
+                    // (string | mandatory) the text inside the notification
+                    text: json.pesan.error,
+                    time: 3000
+                });
+            }
+        },
+        complete: function(xhr) {
+//            status.html(xhr.responseText);
+        }
+    });
+
+    $('.form-fotomikro').ajaxForm({
+        dataType: 'json',
+        success: function(json) {
+            var gritter_title = 'Gagal!';
+
+            if(json.status == true) {
+                gritter_title = 'Berhasil!';
+            }
+
+            $.gritter.add({
+                // (string | mandatory) the heading of the notification
+                title: gritter_title,
+                // (string | mandatory) the text inside the notification
+                text: json.pesan,
+                time: 3000
+            });
+
+
+        }
+    });
+
+    $('.form-deskripsi-conto').ajaxForm({
+        dataType: 'json',
+        success: function(json) {
+            var gritter_title = 'Gagal!';
+
+            if(json.status == true) {
+                gritter_title = 'Berhasil!';
+            }
+
+            $.gritter.add({
+                // (string | mandatory) the heading of the notification
+                title: gritter_title,
+                // (string | mandatory) the text inside the notification
+                text: json.pesan,
+                time: 3000
+            });
+
+
+        }
+    });
+
+/**
+ * Form nilai fisika
+ */
+
+    $('.form-simpan-mikroskopis').ajaxForm({
+        dataType: 'json',
+        success: function(json) {
+            gritter_title = 'gagal';
+
+            var label_update = '<span class="label label-warning"><i class="glyphicon glyphicon-refresh"></i></span>';
+
+            if(json.status == 1)
+            {
+                gritter_title = 'Berhasil';
+                $('#label-for-' + json.pesan[2] + '-mikroskopis').html(label_update);
+            }
+
+            $.gritter.add({
+                // (string | mandatory) the heading of the notification
+                title: gritter_title,
+                // (string | mandatory) the text inside the notification
+                text: json.pesan[0]+ ' ' +json.pesan[1],
+                time: 3000
+            });
+        }
+    });
+
+    $('.form-simpan-komposisi').ajaxForm({
+        dataType: 'json',
+        success: function(json) {
+            gritter_title = 'gagal';
+
+            var label_update = '<span class="label label-warning"><i class="glyphicon glyphicon-refresh"></i></span>';
+
+            if(json.status == 1)
+            {
+                gritter_title = 'Berhasil';
+                $('#label-for-' + json.pesan[2] + '-komposisi').html(label_update);
+            }
+
+            $.gritter.add({
+                // (string | mandatory) the heading of the notification
+                title: gritter_title,
+                // (string | mandatory) the text inside the notification
+                text: json.pesan[0]+ ' ' +json.pesan[1],
+                time: 3000
+            });
+        }
+    });
+
+    $('.form-nilai-fisika').ajaxForm({
+        dataType: 'json',
+        success: function(json) {
+            gritter_title = 'gagal';
+
+            if(json.status == 1)
+            {
+                gritter_title = 'Berhasil';
+
+                // jika analisis berat jenis dan derajat kemagnetan
+                if(json.type_analisis == 'FMBBJ' || json.type_analisis == 'FMBDK' )
+                    $('#nilai-' + json.id +'-nilai').text(json.pesan[0]);
+                //  jika analisis retort
+                else if(json.type_analisis == 'FMBRT') {
+                    $('#nilai-' + json.id +'k-air').text(json.pesan[0][0])
+                    $('#nilai-' + json.id +'k-minyak').text(json.pesan[0][1])
+                    $('#nilai-' + json.id +'sg-batuan').text(json.pesan[0][2])
+                    $('#nilai-' + json.id +'sg-minyak').text(json.pesan[0][3])
+                }
+                // jika analisis kuat tekan dan berat jenis
+                else if(json.type_analisis == 'FMBUF') {
+                    $('#nilai-' + json.id +'-kuat-tekan').text(json.pesan[0][0]);
+                    $('#nilai-' + json.id +'-berat-jenis').text(json.pesan[0][1]);
+                }
+                // jika analisis kuat tekan dan berat jenis
+                else if(json.type_analisis == 'FMBXR') {
+                    $('#nilai-' + json.id +'-xr').text(json.pesan[0]);
+                }
+                //  jika analisis SRA
+                else if(json.type_analisis == 'FMBSR') {
+                    $('#nilai-' + json.id +'-s1').text(json.pesan[0][0]);
+                    $('#nilai-' + json.id +'-s2').text(json.pesan[0][1]);
+                    $('#nilai-' + json.id +'-s3').text(json.pesan[0][2]);
+                    $('#nilai-' + json.id +'-toc').text(json.pesan[0][3]);
+                    $('#nilai-' + json.id +'-tmax').text(json.pesan[0][4]);
+                    $('#nilai-' + json.id +'-hi').text(json.pesan[0][5]);
+                    $('#nilai-' + json.id +'-oi').text(json.pesan[0][6]);
+                }
+
+
+            }
+
+            $.gritter.add({
+                // (string | mandatory) the heading of the notification
+                title: gritter_title,
+                // (string | mandatory) the text inside the notification
+                text: json.title,
+                time: 3000
+            });
+        }
+    });
+
+    function hapus_parameter(id_paramter, nama) {
+        var id_conto = $('#id_conto').val();
+
+        var p = confirm('Apakah anda yakin Hapus Uji Parameter ' + nama + ' ?');
+        if(p == false)
+            return false;
+
+        $.ajax({
+            url: link + 'hapus_uji_param',
+            type: 'post',
+            data: {
+                id_conto: id_conto,
+                id_param: id_paramter
+            },
+            dataType: 'json',
+            success: function(json) {
+                var title_notif = json.status == true ? 'Berhasil!' : 'Gagal!';
+
+                if(json.status == true)
+                    $('#'+id_paramter).hide('slow');
+
+                $.gritter.add({
+                    // (string | mandatory) the heading of the notification
+                    title: title_notif,
+                    // (string | mandatory) the text inside the notification
+                    text: json.pesan,
+                    time: 3000
+                });
+
+            }
+        });
+    }
+
+    $('#btn_tambah_parameter').click(function() {
+        var id_conto = $('#id_conto').val();
+        var id_paramter = $('select[name=param]').val();
+
+        $.ajax({
+            url: link + 'tambah_parameter',
+            type: 'post',
+            data: {
+                id_conto: id_conto,
+                id_param: id_paramter
+            },
+            dataType: 'json',
+            success: function(json) {
+                var title_notif = json.status == true ? 'Berhasil!' : 'Gagal!';
+
+                if(json.status == true)
+                    location.reload();
+
+                $.gritter.add({
+                    // (string | mandatory) the heading of the notification
+                    title: title_notif,
+                    // (string | mandatory) the text inside the notification
+                    text: json.pesan,
+                    time: 3000
+                });
+
+            }
+        });
+    });
+
+    function reproses(id_conto, nama, type) {
+        var id_analisis = $('#id_analisis').val();
+
+        if(!type)
+            type='';
+
+        var p = confirm('Apakah anda yakin Proses Ulang conto ' + nama + ' ?');
+        if(p == false)
+            return false;
+
+        $.ajax({
+            url: link + 'reproses',
+            type: 'post',
+            data: {
+                id_conto: id_conto
+            },
+            dataType: 'json',
+            success: function(json) {
+                var title_notif = json.status == true ? 'Berhasil!' : 'Gagal!';
+
+                if(json.status == true)
+                {
+                    window.location.href = link + 'isi/' + id_analisis + '/' + id_conto  + '/' + type;
+                    return false;
+                }
+
+                $.gritter.add({
+                    // (string | mandatory) the heading of the notification
+                    title: title_notif,
+                    // (string | mandatory) the text inside the notification
+                    text: json.pesan,
+                    time: 3000
+                });
+
+            }
+        });
+    }
+
+    $('#btn-hapus-petugas').click(function(){
+        var id = $(this).data('id');
+        var nama = $(this).data('name');
+        var p = confirm('Apakah anda yakin Hapus Pegawai dengan nama ' + nama + ' ?');
+
+        if(p == true)
+        {
+            $.ajax({
+                url: base_url + 'petugas/delete',
+                type: 'post',
+                data: {
+                    id: id
+                },
+                dataType: 'json',
+                success: function(json) {
+                    if(json.status == true)
+                        window.location.href = base_url + 'petugas';
+                    else
+                        alert('Gagal Hapus Petugas ' + nama);
+                }
+            });
+        }
+        else
+            return false;
+    });
+
+    function hapus_kp(id_kp, nama)
+    {
+        var p = confirm('Apakah anda yakin Hapus Pegawai dengan nama ' + nama + ' ?');
+        if(p == false)
+            return false;
+
+        $.ajax({
+            url: base_url + 'pegawai/hapus',
+            type: 'post',
+            data: {
+                id: id_pegawai
+            },
+            dataType: 'json',
+            success: function(json) {
+                var title_notif = json.status == true ? 'Berhasil!' : 'Gagal!';
+
+                if(json.status == true)
+                    $('#'+id_pegawai).hide('slow');
+
+                $.gritter.add({
+                    // (string | mandatory) the heading of the notification
+                    title: title_notif,
+                    // (string | mandatory) the text inside the notification
+                    text: json.pesan,
+                    time: 3000
+                });
+
+            }
+        });
+    }
+
+$('.btn-update-harga-parameter').click(function(){
+    var id = $(this).data('id');
+    var rowid = $(this).data('rowid');
+    var harga = $('#harga_parameter_' + id).val();
+
+    $.ajax({
+        url: base_url + 'permohonan/update_harga_parameter_permohonan',
+        type: 'post',
+        data: {
+            id: id,
+            rowid: rowid,
+            harga: harga
+        },
+        dataType: 'json',
+        success: function(data) {
+            alert('Berhasil Update Harga Parameter');
+            $('#total-harga').text(data.total);
+        }
+    })
+});
+
+$('.btn-reset-harga-parameter').click(function(){
+    var id = $(this).data('id');
+    var rowid = $(this).data('rowid');
+
+    $.ajax({
+        url: base_url + 'permohonan/reset_harga_parameter_permohonan',
+        type: 'post',
+        data: {
+            id: id,
+            rowid: rowid
+        },
+        dataType: 'json',
+        success: function(data) {
+            $('#harga_parameter_' + id).val(data.harga);
+            $('#total-harga').text(data.total);
+        }
+    })
+});
+
+$("#form-insert-permohonan").submit(function(){
+    var c = confirm('Apakah anda yakin menyimpan form permohonan ini?');
+
+    if(c == false)
+        return false;
+});
+
+$('.form-update-conto-parameter').submit(function(e){
+    e.preventDefault();
+
+    var id = $(this).find('input[name="id"]').val();
+    var nilai = $(this).find('input[name="nilai"]').val();
+
+    $.ajax({
+        url: base_url + 'conto/update_parameter',
+        type: 'post',
+        data: $(this).serialize(),
+        success: function(data) {
+            if(data == true){
+                $('#nilai_' + id).text( nilai );
+            }
+        }
+    });
+});
+
+$('.form-update-analisis-parameter-satuan').submit(function(e){
+    e.preventDefault();
+
+    var id = $(this).find('input[name="id"]').val();
+    var satuan = $(this).find('select[name="satuan[]"]').val();
+
+    $.ajax({
+        url: base_url + 'analisis/update_parameter_satuan',
+        type: 'post',
+        data: {
+            id: id,
+            satuan: satuan
+        },
+        success: function(data) {
+            if(data == true){
+                $('#satuan_' + id).text( satuan );
+            }
+        }
+    });
+});
+
