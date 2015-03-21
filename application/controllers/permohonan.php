@@ -182,9 +182,14 @@ class Permohonan extends PS_Controller
     {
         $permohonan = $this->analisis_m->all();
 
+        $js = array(
+            'datatables/jquery.dataTables.min'
+        );
+
         $data = array(
             'title'         => 'Permohonan',
             'main_content'  => 'permohonan/permohonan_v',
+            'js'            => $js,
             'permohonan'    => $permohonan
         );
 
@@ -459,9 +464,15 @@ class Permohonan extends PS_Controller
     {
         $pemohon = $this->pemohon_m->all();
 
+        $js = array(
+            'datatables/jquery.dataTables.min',
+            'smartwizard/jquery.smartWizard-2.0.min'
+        );
+
         $data = array(
             'title'         => "Pilih Pemohon",
             'main_content'  => 'permohonan/set_pemohon_v',
+            'js'            => $js,
             'pemohon'       => $pemohon
         );
 

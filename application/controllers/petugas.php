@@ -17,16 +17,22 @@ class Petugas extends CI_Controller
     public function index()
     {
         $petugas = $this->petugas_m->all();
+
+        $js = array(
+            'datatables/jquery.dataTables.min'
+        );
+
         $data = array(
             'title'         => 'Petugas',
             'main_content'  => 'petugas/petugas_v',
+            'js'            => $js,
             'petugas'       => $petugas
         );
 
         $this->load->view('template', $data);
     }
 
-    public function daftar()
+    public function add()
     {
         $this->load->library('form_validation');
 

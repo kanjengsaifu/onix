@@ -117,6 +117,10 @@ body {
     padding-bottom: 20px;
 }
 
+#footer {
+    margin-top: 50px;
+}
+
 .home-img-container {
 
 }
@@ -227,43 +231,6 @@ body {
 
 .progress-bar {
     padding: 10px;
-}
-
-/* Data Table Theme */
-table.dataTable {
-    color: #2c3e50;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: .9em;
-    font-weight: 300;
-    text-align: left;
-    line-height: 40px;
-    border-spacing: 0;
-    border: 1px solid #428bca;
-    margin: 0 !important;
-}
-
-table.dataTable thead tr:first-child {
-    background: #428bca;
-    color: #fff;
-    border: none;
-}
-
-table.dataTable th {font-weight: bold;}
-table.dataTable th:first-child, table.dataTable td:first-child {text-align: center}
-table.dataTable thead th, table.dataTable td {padding: 8px;}
-
-table.dataTable > tbody > tr > td {
-    padding: 8px;
-}
-
-table.dataTable thead tr:last-child th {border-bottom: 2px solid #ddd;}
-
-table.dataTable tbody tr:hover {background-color: #f0fbff;}
-table.dataTable tbody tr:last-child td {border: none;}
-table.dataTable tbody td {border-bottom: 1px solid #ddd;}
-
-table.dataTable tr.odd, tr.even, table.dataTable tr.odd td.sorting_1, table.dataTable tr.even td.sorting_1 {
-    background-color: transparent;
 }
 
 .label {

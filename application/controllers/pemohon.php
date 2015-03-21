@@ -17,16 +17,22 @@ class Pemohon extends CI_Controller
     public function index()
     {
         $pemohon = $this->pemohon_m->all();
+
+        $js = array(
+            'datatables/jquery.dataTables.min'
+        );
+
         $data = array(
             'title'         => 'Pemohon',
             'main_content'  => 'pemohon/pemohon_v',
+            'js'            => $js,
             'pemohon'       => $pemohon
         );
 
         $this->load->view('template', $data);
     }
 
-    public function daftar()
+    public function add()
     {
         $this->load->library('form_validation');
         $type_pemohon = $this->pemohon_m->get_all_type_pemohon();

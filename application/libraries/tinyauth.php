@@ -155,12 +155,14 @@ class Tinyauth
             {
                 $id_user = $this->CI->pemohon_m->get_id_by_user($login['user']);
                 $this->CI->session->set_userdata('logged_user', $login['user']);
+                $this->CI->session->set_userdata('logged_user', $login['user']);
                 $this->CI->session->set_userdata('id_user', $id_user);
             }
             else
             {
                 $petugas = $this->CI->petugas_m->find_by_username($login['user']);
                 $this->CI->session->set_userdata('logged_user', $login['user']);
+                $this->CI->session->set_userdata('logged_name', $petugas->nama);
                 $this->CI->session->set_userdata('komoditi', $petugas->id_komoditi);
                 $this->CI->session->set_userdata('logged_id', $petugas->id_petugas);
 
