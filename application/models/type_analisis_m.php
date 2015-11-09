@@ -18,9 +18,9 @@ class Type_analisis_m extends CI_Model
         return $this->db->get("type_analisis")->result();
     }
 
-    public function find($id_type_analisis)
+    public function find($id)
     {
-        return $this->db->where('id_type_analisis', $id_type_analisis)->limit(1)->get("type_analisis")->row();
+        return $this->db->where('id', $id)->limit(1)->get("type_analisis")->row();
     }
 
     public function find_by_id_type($id_type)
@@ -28,9 +28,34 @@ class Type_analisis_m extends CI_Model
         return $this->db->where('id_type_analisis', $id_type)->limit(1)->get("type_analisis")->row();
     }
 
+    public function insert($input)
+    {
+        $data = [
+            'id_type_analisis'      => strtolower($input['id_type_analisis']),
+            'nama'                  => $input['nama'],
+            'id_lab'                => $input['id_lab'],
+            'deskripsi'             => $input['deskripsi'],
+            'harga'                 => $input['harga'],
+            'created_date'          => now()
+        ];
+
+        $this->db->insert('type_analisis', $data);
+
+        return $this->db->insert_id();
+    }
+
+    public function parameter($id_type_analisis)
+    {
+        return $this->db->select('type_analisis_parameter.*, parameter.nama as nama_parameter')
+            ->join('parameter', 'type_analisis_parameter.id_parameter=parameter.id')
+            ->where('id_type_analisis', $id_type_analisis)
+            ->get('type_analisis_parameter')
+            ->result();
+    }
+
     public function by_lab($id_lab)
     {
-        return $this->db->where('id_lab', $id_lab)->get('type_analisis')->result();
+        return $this->db->where('id_lab', $id_lab)->order_by('nama', 'ASC')->get('type_analisis')->result();
     }
 
     public function detail_type_analisis($id_type)
@@ -77,6 +102,23 @@ class Type_analisis_m extends CI_Model
         $nama = !$r ? FALSE : $r->nama;
 
         return $nama;
+    }
+
+    public function insert_parameter($input)
+    {
+        $data = [
+            'id_parameter'      => $input['id_parameter'],
+            'harga'             => $input['harga'],
+            'satuan'            => $input['satuan'],
+            'id_type_analisis'  => $input['id_type_analisis']
+        ];
+
+        return $this->db->insert('type_analisis_parameter', $data);
+    }
+
+    public function delete_type_analisis_parameter($id)
+    {
+        return $this->db->where('id', $id)->delete('type_analisis_parameter');
     }
 
 }

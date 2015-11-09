@@ -1,43 +1,63 @@
-<?php
-/**
- * Created by JetBrains PhpStorm.
- * User: Unleashed
- * Date: 11/23/13
- * Time: 10:21 AM
- */
 
-?>
-<a href="<?php echo base_url('type_analisis/detail/'.$type_analisis->id_type_analisis); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-chevron-left"></i> Kembali</a>
-<br>
-<br>
-<?php echo validation_errors('<div class="alert alert-danger">', '</div>'); ?>
-<h1>Tambah Parameter untuk Type Analisis <?php echo $type_analisis->nama; ?></h1>
-<hr>
-<form method="post">
-    <div class="form-group">
-        <label>ID Parameter</label>
-        <input type="text" name="id_parameter" value="<?php echo set_value('id_parameter'); ?>" class="form-control">
-    </div>
-    <div class="form-group">
-        <label>Nama Parameter</label>
-        <input type="text" name="nama" value="<?php echo set_value('nama'); ?>" class="form-control">
-    </div>
-    <div class="form-group">
-        <label for="harga">Harga</label>
-        <div class="input-group">
-            <span class="input-group-addon">Rp.</span>
-            <input type="text" name="harga" value="<?php echo set_value('harga'); ?>" class="form-control" id="harga">
+<!-- START BREADCRUMB -->
+<ul class="breadcrumb">
+    <li><a href="#">Home</a></li>
+    <li><a href="<?php echo base_url('parameter'); ?>">Parameter</a></li>
+    <li class="active">Tambah Parameter</li>
+</ul>
+<!-- END BREADCRUMB -->
+
+<!-- PAGE TITLE -->
+<div class="page-title">
+    <h2><span class="fa fa-flask"></span> Parameter</h2>
+</div>
+<!-- END PAGE TITLE -->
+
+<form class="form-horizontal" role="form" action="<?php echo base_url('parameter/create'); ?>" method="post">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        <span class="fa fa-plus"></span> Tambah Parameter
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label class="col-md-3 col-xs-12 control-label" for="nama">Nama Parameter</label>
+                        <div class="col-md-6 col-xs-12">
+                            <input type="text" class="form-control" id="nama" name="nama" value="<?php echo set_value('nama'); ?>">
+                            <?php echo form_error('nama', '<small class="text-danger">', '</small>'); ?>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 col-xs-12 control-label" for="nama">Harga</label>
+                        <div class="col-md-6 col-xs-12">
+                            <input type="text" class="form-control" id="harga" name="harga" value="<?php echo set_value('harga'); ?>">
+                            <?php echo form_error('harga', '<small class="text-danger">', '</small>'); ?>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 col-xs-12 control-label" for="nama">Satuan</label>
+                        <div class="col-md-6 col-xs-12">
+                            <input type="text" class="form-control" id="satuan" name="satuan" value="<?php echo set_value('satuan'); ?>">
+                            <?php echo form_error('satuan', '<small class="text-danger">', '</small>'); ?>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 col-xs-12 control-label" for="deskripsi">Deskripsi</label>
+                        <div class="col-md-6 col-xs-12">
+                            <textarea class="form-control" id="deskripsi" name="deskripsi"><?php echo set_value('deskripsi'); ?></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-footer">
+                    <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-save"></i> Simpan</button>
+                </div>
+            </div>
+
         </div>
     </div>
-    <div class="form-group">
-        <label>Satuan</label>
-        <input type="text" name="satuan" value="<?php echo set_value('satuan'); ?>" class="form-control">
-    </div>
-    <div class="form-group">
-        <label>Deskripsi</label>
-        <input type="text" name="deskripsi" value="<?php echo set_value('deskripsi'); ?>" class="form-control">
-    </div>
-    <input type="hidden" name="id_type" value="<?php echo $type_analisis->id_type; ?>">
-    <input type="hidden" name="id_type_analisis" value="<?php echo $type_analisis->id_type_analisis; ?>">
-    <button class="btn btn-primary">Simpan</button>
 </form>
+
+

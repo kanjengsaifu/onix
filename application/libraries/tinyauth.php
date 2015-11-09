@@ -50,7 +50,7 @@ class Tinyauth
                 }
                 else
                 {
-                    if($this->CI->session->userdata('komoditi') == 'tu')
+                    if( in_array($this->CI->session->userdata('komoditi'), ['tu', 'pw']))
                     {
                         redirect('permohonan');
                     }
@@ -62,44 +62,14 @@ class Tinyauth
             }
             else
             {
-                set_flashdata('Kombinasi Username dan Password Anda salah.');
+                set_flashdata('Kombinasi Username dan Password Anda salah.', 'danger');
                 redirect('login');
             }
         }
         else
         {
-            set_flashdata(validation_errors());
+            set_flashdata(validation_errors(), 'danger');
             $this->CI->load->view('login_v');
-        }
-    }
-
-    public function login_kepala()
-    {
-        if( $this->_valid->run('login'))
-        {
-            $login = array(
-                'user'      => $this->CI->input->post('username'),
-                'pass'      => $this->CI->input->post('password'),
-                'user_type' => '2'
-            );
-
-            if($this->_validate_login($login))
-            {
-                redirect('permohonan');
-            }
-            else
-            {
-                redirect('kepala');
-            }
-        }
-        else
-        {
-            $data = array(
-                'title' => 'Laboratorium Pusat Sumber Daya Geologi',
-                'main_content'  => 'login_kepala_v'
-            );
-
-            $this->CI->load->view('template', $data);
         }
     }
 
@@ -116,66 +86,21 @@ class Tinyauth
             return FALSE;
         }
 
-        // validating login pemohon
-        if($login['user_type'] == 1)
-        {
-            $cek_login = $this->CI->pemohon_m->cek_login($login['user'], sha1($login['pass']));
-            if($cek_login)
-            {
-                $login_cek = TRUE;
-                $user_type = '1';
-            }
-            else
-                return FALSE;
-        }
+        $cek_login = $this->CI->petugas_m->cek_login($login['user'], sha1($login['pass']));
 
-        // validation login petugas
-        elseif($login['user_type'] == 2)
+        if($cek_login)
         {
-            $cek_login = $this->CI->petugas_m->cek_login($login['user'], sha1($login['pass']));
-
-            if($cek_login)
-            {
-                $login_cek = TRUE;
-                $user_type = '2';
-            }
-            else
-            {
-                return FALSE;
-            }
+            $petugas = $this->CI->petugas_m->find_by_username($login['user']);
+            $this->CI->session->set_userdata('logged_user', $login['user']);
+            $this->CI->session->set_userdata('logged_name', $petugas->nama);
+            $this->CI->session->set_userdata('komoditi', $petugas->id_komoditi);
+            $this->CI->session->set_userdata('logged_id', $petugas->id_petugas);
+            $this->CI->session->set_userdata('user_type', 2);
         }
         else
         {
             return FALSE;
         }
-
-        if( $login_cek )
-        {
-            if($user_type == '1')
-            {
-                $id_user = $this->CI->pemohon_m->get_id_by_user($login['user']);
-                $this->CI->session->set_userdata('logged_user', $login['user']);
-                $this->CI->session->set_userdata('logged_user', $login['user']);
-                $this->CI->session->set_userdata('id_user', $id_user);
-            }
-            else
-            {
-                $petugas = $this->CI->petugas_m->find_by_username($login['user']);
-                $this->CI->session->set_userdata('logged_user', $login['user']);
-                $this->CI->session->set_userdata('logged_name', $petugas->nama);
-                $this->CI->session->set_userdata('komoditi', $petugas->id_komoditi);
-                $this->CI->session->set_userdata('logged_id', $petugas->id_petugas);
-
-            }
-
-            $this->CI->session->set_userdata('user_type', $user_type);
-            return TRUE;
-        }
-        else
-        {
-            return FALSE;
-        }
-
     }
 
     public function is_admin()
@@ -198,7 +123,7 @@ class Tinyauth
 
     public function logged_in()
     {
-        if( $this->CI->session->userdata('logged_user') == '' )
+        if( !$this->CI->session->userdata('logged_user') )
         {
             return FALSE;
         }
@@ -208,8 +133,25 @@ class Tinyauth
         }
     }
 
+    public function redirect_page()
+    {
+        if(in_array($this->CI->session->userdata('komoditi'), ['tu', 'pw']))
+        {
+            redirect('permohonan');
+        }
+        elseif($this->CI->session->userdata('komoditi') == 'pp')
+        {
+            redirect('preparasi');
+        }
+        else
+        {
+            redirect('analisis');
+        }
+    }
+
     public function logout()
     {
+        $this->CI->petugas_m->logout($this->CI->session->userdata('logged_id'));
         $this->CI->session->sess_destroy();
         redirect('home');
     }

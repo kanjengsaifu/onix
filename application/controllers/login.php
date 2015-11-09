@@ -11,7 +11,6 @@ class Login extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        $this->load->library(array('tinyauth'));
     }
 
     public function index()
@@ -22,7 +21,7 @@ class Login extends CI_Controller
         }
         else
         {
-            redirect('home');
+            $this->tinyauth->redirect_page();
         }
     }
 

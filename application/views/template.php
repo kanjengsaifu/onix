@@ -6,11 +6,12 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title><?php echo $title; ?></title>
+        <title><?php echo $title; ?>  - Pusat Sumber Daya Geologi</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+        <link rel="icon" href="favicon.ico" type="image/x-icon" />
 
         <link rel="stylesheet" href="<?php echo base_url(CSS.'app.css'); ?>">
         <link rel="stylesheet" href="<?php echo base_url(CSS.'main.css'); ?>">
@@ -67,6 +68,10 @@
         <script type="text/javascript" src="<?php echo base_url(JS.'jquery/jquery.min.js'); ?>"></script>
         <script type="text/javascript" src="<?php echo base_url(JS.'jquery/jquery-ui.min.js'); ?>"></script>
         <script type="text/javascript" src="<?php echo base_url(JS.'bootstrap/bootstrap.min.js'); ?>"></script>
+        <script type="text/javascript" src="<?php echo base_url(JS.'bootstrap/bootstrap-datepicker.js'); ?>"></script>
+        <script type="text/javascript" src="<?php echo base_url(JS.'bootstrap/bootstrap-select.js'); ?>"></script>
+        <script type="text/javascript" src="<?php echo base_url(JS.'icheck/icheck.min.js'); ?>"></script>
+        <script type="text/javascript" src="<?php echo base_url(JS.'datatables/jquery.dataTables.min.js'); ?>"></script>
         <script type="text/javascript" src="<?php echo base_url(JS.'mcustomscrollbar/jquery.mCustomScrollbar.min.js'); ?>"></script>
 
         <?php if(isset($js)): ?>
@@ -77,6 +82,7 @@
 
         <script type="text/javascript" src="<?php echo base_url(JS.'plugins.js'); ?>"></script>
         <script type="text/javascript" src="<?php echo base_url(JS.'actions.js'); ?>"></script>
+        <script type="text/javascript" src="<?php echo base_url(JS.'labs.js'); ?>"></script>
 <!--        <script type="text/javascript" src="--><?php //echo base_url(JS.'main.js'); ?><!--"></script>-->
 <!--        <script type="text/javascript" src="--><?php //echo base_url(JS.'labs.js'); ?><!--"></script>-->
     </body>

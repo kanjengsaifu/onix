@@ -20,6 +20,32 @@ class Conto_m extends CI_Model
             ->row();
     }
 
+    public function find_detail_conto_fisika($id)
+    {
+        return $this->db->where('id', $id)
+            ->limit(1)
+            ->get('conto_detail_fisika')
+            ->row();
+    }
+
+    public function detail_fisika($id_conto, $id_type_analisis)
+    {
+        return $this->db->where('id_conto', $id_conto)
+            ->where('id_type_analisis', $id_type_analisis)
+            ->limit(1)
+            ->get('conto_detail_fisika')
+            ->row();
+    }
+
+    public function detail_fisika_by_conto($id_conto)
+    {
+        return $this->db->where('id_conto', $id_conto)
+            ->join('type_analisis', 'type_analisis.id=conto_detail_fisika.id_type_analisis')
+            ->select('conto_detail_fisika.*, type_analisis.nama as nama_type_analisis, type_analisis.id_type_analisis as kode_type_analisis')
+            ->get('conto_detail_fisika')
+            ->result();
+    }
+
     /**
      * @param $id_analisis
      * @return mixed
@@ -62,6 +88,20 @@ class Conto_m extends CI_Model
                             ->where('is_selesai', TRUE)
                             ->get('conto')
                             ->result();
+
+        return count($result);
+    }
+
+    /**
+     * @param $id_analisis
+     * @return mixed
+     */
+    public function count_conto_added_by_analisis($id_analisis)
+    {
+        $result = $this->db->select('id')
+            ->where('id_analisis', $id_analisis)
+            ->get('conto')
+            ->result();
 
         return count($result);
     }
@@ -114,7 +154,21 @@ class Conto_m extends CI_Model
      */
     public function type_analisis($id_conto)
     {
-        return $this->db->where('id_conto', $id_conto)->get('conto_type_analisis')->result();
+        return $this->db->select('conto_detail_fisika.*, type_analisis.nama as type_analisis')
+            ->join('type_analisis', 'type_analisis.id=conto_detail_fisika.id_type_analisis')
+            ->where('id_conto', $id_conto)->get('conto_detail_fisika')->result();
+    }
+
+    public function parameter_by_type_analisis($id_conto, $id_type_analisis)
+    {
+        return $this->db->select('conto_parameter.*, analisis_parameter.satuan, analisis_parameter.satuan, analisis_parameter.id_metoda, analisis_parameter.basis, analisis_parameter.harga, parameter.nama as nama_parameter, parameter.deskripsi')
+            ->join('analisis_parameter', 'analisis_parameter.id=conto_parameter.id_analisis_parameter')
+            ->join('type_analisis_parameter', 'type_analisis_parameter.id=analisis_parameter.id_type_analisis_parameter')
+            ->join('parameter', 'parameter.id=type_analisis_parameter.id_parameter')
+            ->where('type_analisis_parameter.id_type_analisis', $id_type_analisis)
+            ->where('conto_parameter.id_conto', $id_conto)
+            ->get('conto_parameter')
+            ->result();
     }
 
     /**
@@ -144,7 +198,7 @@ class Conto_m extends CI_Model
     {
         $data = array(
             'id_conto'      => $input['id_conto'],
-            'id_parameter'  => $input['id_parameter'],
+            'id_analisis_parameter'  => $input['id'],
             'nilai'         => 0
         );
 
@@ -204,5 +258,31 @@ class Conto_m extends CI_Model
         }
     }
 
+    public function update_nilai_fisika($input)
+    {
+        $data = [
+            'nilai'     => json_encode($input)
+        ];
+
+        return $this->db->where('id', $input['id'])->update('conto_detail_fisika', $data);
+    }
+
+    public function update_kode_conto($input)
+    {
+        $data = [
+            'kode_conto'    => $input['kode_conto']
+        ];
+
+        return $this->db->where('id', $input['id'])->update('conto', $data);
+    }
+
+    public function set_selesai($input)
+    {
+        $data = [
+            'is_selesai'    => $input['value']
+        ];
+
+        return $this->db->where('id', $input['id'])->update('conto', $data);
+    }
 
 }

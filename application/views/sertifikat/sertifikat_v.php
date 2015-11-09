@@ -68,7 +68,10 @@ $pdf->Line(1,4.5,20.7,4.5);
 
 $pdf->Ln();
 
-$pdf->Image(base_url(IMAGES.'logo-kan.png'),18,2.3,2.5);
+if($analisis->logo_kan == 1)
+{
+    $pdf->Image(base_url(IMAGES.'logo-kan.png'),18,2.3,2.5);
+}
 
 /*
  * END HEADER
@@ -90,8 +93,8 @@ $pdf->Ln(1);
 
 $pdf->SetFont('Arial','',10);
 $pdf->SetX(3);
-$pdf->Cell(0,0.75,'NO. '. strtoupper($analisis->nomor_analisis),0,0,'L');
-$pdf->Cell(0,0.75,'Tanggal/Date : '. tanggal_format_indonesia(now()),0,0,'R');
+$pdf->Cell(0,0.75,'NO. '. $analisis->nomor_sertifikat,0,0,'L');
+$pdf->Cell(0,0.75,'Tanggal/Date : '. tanggal_format_indonesia($analisis->tanggal_publish),0,0,'R');
 $pdf->Ln(1);
 
 $pdf->SetFont('Arial','U',14);
@@ -191,7 +194,9 @@ $pdf->SetX(9);
 $pdf->SetFont('Arial','',10);
 $pdf->Cell(0,0.75,':',0,0,'L');
 $pdf->SetX(10);
-$pdf->Cell(0,0.75,$analisis->nomor_analisis,0,0,'L');
+$nomor_analisis_akhir = substr($analisis->nomor_analisis,6,5);
+$jumlah = $nomor_analisis_akhir + $analisis->jumlah_conto-1;
+$pdf->Cell(0,0.75,$analisis->nomor_analisis .' - '.$jumlah,0,0,'L');
 $pdf->Ln();
 $pdf->SetX(3);
 $pdf->SetFont('Arial','I',10);
@@ -223,7 +228,7 @@ $pdf->SetX(9);
 $pdf->SetFont('Arial','',10);
 $pdf->Cell(0,0.75,':',0,0,'L');
 $pdf->SetX(10);
-$pdf->Cell(0,0.75,tanggal_format_indonesia($analisis->tanggal_daftar),0,0,'L');
+$pdf->Cell(0,0.75,tanggal_format_indonesia($analisis->tanggal_analisis),0,0,'L');
 $pdf->Ln();
 $pdf->SetX(3);
 $pdf->SetFont('Arial','I',10);

@@ -34,12 +34,19 @@ class lokasi_m extends CI_Model
 
         $array = (object) $array;
 
-        return $string_only ? 'Kab. ' . $kabupaten->nama . ', Prov. ' . $provinsi->nama : $array;
+        $string = $provinsi->id_provinsi == '0' ? $kabupaten->nama : 'Kab. ' . $kabupaten->nama . ', Prov. ' . $provinsi->nama;
+
+        return $string_only ? $string : $array;
     }
 
     public function all_provinsi()
     {
         return $this->db->order_by('nama', 'ASC')->get('provinsi')->result();
+    }
+
+    public function all_kabupaten()
+    {
+        return $this->db->order_by('nama', 'ASC')->get('kabupaten')->result();
     }
 
     public function kabupaten_by_provinsi($id_provinsi)
@@ -87,6 +94,44 @@ class lokasi_m extends CI_Model
             $nama = FALSE;
 
         return $nama;
+    }
+
+    public function insert_provinsi($input)
+    {
+        $data = [
+            'nama'  => $input['nama']
+        ];
+
+        return $this->db->insert('provinsi', $data);
+    }
+
+    public function insert_kabupaten($input)
+    {
+        $data = [
+            'nama'  => $input['nama'],
+            'id_provinsi' => $input['id_provinsi']
+        ];
+
+        return $this->db->insert('kabupaten', $data);
+    }
+
+    public function update_provinsi($input)
+    {
+        $data = [
+            'nama'      => $input['nama']
+        ];
+
+        return $this->db->where('id_provinsi', $input['id'])->update('provinsi', $data);
+    }
+
+    public function update_kabupaten($input)
+    {
+        $data = [
+            'nama'          => $input['nama'],
+            'id_provinsi'   => $input['id_provinsi']
+        ];
+
+        return $this->db->where('id_kabupaten', $input['id'])->update('kabupaten', $data);
     }
 
 }

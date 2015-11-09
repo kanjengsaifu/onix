@@ -5,7 +5,7 @@
  * Date: 11/23/13
  * Time: 9:58 AM
  */
-class Type_analisis extends CI_Controller
+class Type_analisis extends Admin_controller
 {
 
     public function __construct()
@@ -14,7 +14,9 @@ class Type_analisis extends CI_Controller
         $model = array(
             'type_analisis_m',
             'parameter_m',
-            'metoda_m'
+            'metoda_m',
+            'prosedur_m',
+            'lab_m'
         );
         $this->load->model($model);
     }
@@ -22,9 +24,15 @@ class Type_analisis extends CI_Controller
     public function index()
     {
         $type_analisis  = $this->type_analisis_m->all();
+
+        $js = array(
+            'datatables/jquery.dataTables.min'
+        );
+
         $data = array(
             'title'         => 'Type Analisis',
             'main_content'  => 'type_analisis/type_analisis_v',
+            'js'            => $js,
             'type_analisis' => $type_analisis
         );
 
@@ -36,8 +44,9 @@ class Type_analisis extends CI_Controller
         $this->load->model('lab_m');
 
         // initialize
-        $type_analisis = $this->type_analisis_m->find($id_type_analisis);
-        $parameter = $this->parameter_m->by_type_analisis($type_analisis->id_type);
+        $parameter = $this->parameter_m->all();
+        $type_analisis = $this->type_analisis_m->find_by_id_type($id_type_analisis);
+        $type_analisis_parameter = $this->type_analisis_m->parameter($type_analisis->id);
         $lab = $this->lab_m->find($type_analisis->id_lab);
         $type_analisis->laboratorium = $lab;
 
@@ -46,10 +55,49 @@ class Type_analisis extends CI_Controller
             'main_content'  => 'type_analisis/detail_type_analisis_v',
             'parameter'     => $parameter,
             'type_analisis' => $type_analisis,
+            'type_analisis_parameter' => $type_analisis_parameter,
             'lab'           => $lab
         );
 
         $this->load->view('template', $data);
+    }
+
+    public function create()
+    {
+        $this->load->library('form_validation');
+
+        if($this->form_validation->run())
+        {
+            $this->type_analisis_m->insert($this->input->post());
+            redirect('type_analisis/detail/' . $this->input->post('id_type_analisis'));
+        }
+        else
+        {
+
+            $lab = $this->lab_m->all();
+            $data = [
+                'title'             => 'Tambah type Analisis',
+                'main_content'      => 'type_analisis/t_type_analisis_v',
+                'laboratorium'      => $lab
+            ];
+
+            $this->load->view('template', $data);
+        }
+    }
+
+    public function insert_type_analisis_parameter()
+    {
+        $this->load->library('form_validation');
+
+        if($this->form_validation->run())
+        {
+            $this->type_analisis_m->insert_parameter($this->input->post());
+            redirect('type_analisis/detail/' . $this->input->post('id_type_analisis_kode'));
+        }
+        else
+        {
+            $this->detail($this->input->post('id_type_analisis_kode'));
+        }
     }
 
     public function update_harga()
@@ -97,7 +145,7 @@ class Type_analisis extends CI_Controller
 
             if(count($parameter_dipakai) <= 4)
             {
-                $harga_param_minimal = rupiah(600000*$jumlah);
+                $harga_param_minimal = format_rupiah(600000*$jumlah);
             }
             else
             {
@@ -118,7 +166,7 @@ class Type_analisis extends CI_Controller
 
                 $harga_param_minimal = $total;
 
-                $harga_param_minimal = rupiah($harga_param_minimal);
+                $harga_param_minimal = format_rupiah($harga_param_minimal);
 
             }
 
@@ -167,6 +215,124 @@ class Type_analisis extends CI_Controller
             $this->load->view('template', $data);
         }
 
+    }
+
+    /**
+     * @param $id
+     */
+    public function prosedur($id)
+    {
+        $this->load->library('form_validation');
+
+        // initialize
+        $type_analisis = $this->type_analisis_m->find_by_id_type($id);
+        if(empty($type_analisis))
+        {
+            redirect('type_analisis');
+        }
+
+        $this->load->model(array('reference_m'));
+        $reference['kegiatan'] = $this->reference_m->all('kegiatan');
+        $reference['pelaksana'] = $this->reference_m->all('pelaksana');
+        $reference['kelengkapan'] = $this->reference_m->all('kelengkapan');
+        $reference['keluaran'] = $this->reference_m->all('keluaran');
+
+        $id_prosedur = $this->prosedur_m->insert_prosedur($type_analisis->id);
+
+        $prosedur = $this->prosedur_m->find_by_type_analisis($type_analisis->id);
+
+        if(!empty($prosedur))
+        {
+            $prosedur->kegiatan = $this->prosedur_m->kegiatan($prosedur->id);
+            foreach($prosedur->kegiatan as $key => $value)
+            {
+                $prosedur->kegiatan[$key]->kelengkapan = $this->prosedur_m->kelengkapan_prosedur_kegiatan($value->id);
+            }
+        }
+
+        $js = [
+          'moment/moment.min'
+        ];
+
+        $data = [
+            'title'                 => 'Update Prosedur',
+            'main_content'          => 'type_analisis/prosedur_type_analisis_v',
+            'js'                    => $js,
+            'type_analisis'         => $type_analisis,
+            'prosedur'              => $prosedur,
+            'reference'             => $reference
+        ];
+
+        $this->load->view('template', $data);
+    }
+
+    public function update_prosedur()
+    {
+        $this->load->library('form_validation');
+
+        if($this->form_validation->run())
+        {
+            $this->prosedur_m->update_prosedur($this->input->post());
+        }
+
+        redirect('type_analisis/prosedur/' . $this->input->post('kode_type_analisis'));
+    }
+
+    public function insert_prosedur_kegiatan()
+    {
+        $this->load->library('form_validation');
+        if($this->form_validation->run())
+        {
+            $insert_prosedur_kegiatan = $this->prosedur_m->insert_prosedur_kegiatan($this->input->post());
+
+            if($insert_prosedur_kegiatan)
+            {
+                foreach($this->input->post('kelengkapan') as $kelengkapan)
+                {
+                    $input = [
+                        'id_prosedur_kegiatan'  => $insert_prosedur_kegiatan,
+                        'kelengkapan'           => $kelengkapan
+                    ];
+                    $this->prosedur_m->insert_kelengkapan_prosedur_kegiatan($input);
+                }
+            }
+            redirect('type_analisis/prosedur/' . $this->input->post('kode_type_analisis'));
+        }
+        else
+        {
+            $this->prosedur($this->input->post('kode_type_analisis'));
+        }
+    }
+
+    public function delete_prosedur_kegiatan()
+    {
+        $delete = $this->prosedur_m->delete_prosedur_kegiatan($this->input->post());
+
+        echo $delete ? 1 : 0;
+    }
+
+    public function update_prosedur_kegiatan_order()
+    {
+        $this->prosedur_m->update_prosedur_kegiatan_order($this->input->post());
+    }
+
+    public function copy_from_default($id_type_analisis, $id_prosedur)
+    {
+        $this->prosedur_m->batch_copy_prosedur_kegiatan($id_prosedur, 4);
+        redirect('type_analisis/prosedur/' . $id_type_analisis);
+    }
+
+    public function update_prosedur_khusus()
+    {
+        $update = $this->prosedur_m->update_prosedur_khusus($this->input->post());
+        echo $update ? 1 : 0;
+    }
+
+    public function delete_type_analisis_parameter()
+    {
+        $kode_type_analisis = $this->input->post('kode_type_analisis');
+        $this->type_analisis_m->delete_type_analisis_parameter($this->input->post('id'));
+        redirect('type_analisis/detail/' . $kode_type_analisis);
     }
 
 }

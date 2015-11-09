@@ -52,7 +52,7 @@ $autoload['packages'] = array();
 |	$autoload['libraries'] = array('database', 'session', 'xmlrpc');
 */
 
-$autoload['libraries'] = array('database','session','tinyauth');
+$autoload['libraries'] = array('database', 'session', 'tinyauth');
 
 
 /*
@@ -64,7 +64,7 @@ $autoload['libraries'] = array('database','session','tinyauth');
 |	$autoload['helper'] = array('url', 'file');
 */
 
-$autoload['helper'] = array('url','show', 'unleashed.lib');
+$autoload['helper'] = array('url','show', 'unleashed');
 
 
 /*
@@ -109,7 +109,7 @@ $autoload['language'] = array();
 |
 */
 
-$autoload['model'] = array();
+$autoload['model'] = array('lab_m', 'message_m');
 
 
 /* End of file autoload.php */

@@ -166,7 +166,7 @@ class Pemohon_m extends CI_Model
         return $this->db->insert_id();
     }
 
-    public function ubah()
+    public function update()
     {
         $type_pemohon = $this->input->post('type_pemohon');
         $nama = $this->input->post('nama');
@@ -176,22 +176,14 @@ class Pemohon_m extends CI_Model
         $id = $this->input->post('id');
 
         $data = array(
-            $type_pemohon,
-            $nama,
-            $nama_sertifikat,
-            $alamat,
-            $deskripsi,
-            $id
+            'id_type_pemohon'   => $type_pemohon,
+            'nama'              => $nama,
+            'nama_sertifikat'   => $nama_sertifikat,
+            'alamat'            => $alamat,
+            'deskripsi'         => $deskripsi
         );
 
-        $q = 'UPDATE pemohon SET
-                id_type_pemohon=?,
-                nama=?,
-                nama_sertifikat=?,
-                alamat=?,
-                deskripsi=?
-                WHERE id_pemohon = ?';
-        $result = $this->db->query($q, $data);
+        $result = $this->db->where('id_pemohon', $id)->update('pemohon', $data);
 
         if($result == TRUE)
             return TRUE;

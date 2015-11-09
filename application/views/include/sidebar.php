@@ -5,55 +5,58 @@
         <li class="xn-title text-center">Pusat Sumber Daya Geologi</li>
         <li class="xn-profile">
             <a href="#" class="profile-mini">
-                <img src="<?php echo base_url(IMAGES.'user/avatar.jpg'); ?>" alt="John Doe"/>
+                <img src="<?php echo base_url(IMAGES.'logo.png'); ?>" alt="Psdg"/>
             </a>
             <div class="profile">
                 <div class="profile-image">
-                    <img src="<?php echo base_url(IMAGES.'user/avatar.jpg'); ?>" alt="John Doe"/>
+                    <img src="<?php echo base_url(IMAGES.'logo.png'); ?>" alt="Psdg"/>
                 </div>
                 <div class="profile-data">
                     <div class="profile-data-name"><?php echo $this->session->userdata('logged_name'); ?></div>
                     <div class="profile-data-title"></div>
                 </div>
                 <div class="profile-controls">
-                    <a href="pages-profile.html" class="profile-control-left"><span class="fa fa-info"></span></a>
-                    <a href="pages-messages.html" class="profile-control-right"><span class="fa fa-envelope"></span></a>
+                    <a href="<?php echo base_url('petugas/my_profile'); ?>" class="profile-control-left"><span class="fa fa-info"></span></a>
+                    <a href="<?php echo base_url('message'); ?>" class="profile-control-right"><span class="fa fa-envelope"></span>
+                        <?php
+                            $inbox = $this->message_m->count_unread_by_message_to($this->session->userdata('logged_id'));
+                            if( $inbox != 0):
+                        ?>
+                            <span class="label label-success"><?php echo $inbox; ?></span>
+                        <?php endif; ?>
+                    </a>
                 </div>
             </div>
         </li>
-        <li class="xn-openable <?php echo $this->uri->segment(1) == 'permohonan' ? ' active' : ''; ?>">
-            <a href="#"><i class="fa fa-list"></i> <span class="xn-text">Permohonan</span></a>
-            <ul>
-                <li><a href="<?php echo base_url('permohonan'); ?>">List Permohonan</a></li>
-                <li class="xn-title">Form Tugas Analisis</li>
-                <li><a href="<?php echo base_url('permohonan/daftar/kml'); ?>">Kimia Logam</a></li>
-                <li><a href="<?php echo base_url('permohonan/daftar/knl'); ?>">Kimia Bukan Logam</a></li>
-                <li><a href="<?php echo base_url('permohonan/daftar/kpb'); ?>">Panas Bumi</a></li>
-                <li><a href="<?php echo base_url('permohonan/daftar/kbb'); ?>">Kimia Batubara & Material Organik</a></li>
-                <li><a href="<?php echo base_url('permohonan/daftar/kgb'); ?>">Kimia Gambut</a></li>
-                <li><a href="<?php echo base_url('permohonan/daftar/fmb'); ?>">Fisika Mineral & Batubara</a></li>
-            </ul>
-        </li>
-        <li class="xn-openable">
-            <a href="#"><i class="fa fa-user"></i> <span class="xn-text"> Pemohon</span></a>
-            <ul>
-                <li><a href="<?php echo base_url('pemohon'); ?>">List Pemohon</a></li>
-                <li class="divider"></li>
-                <li><a href="<?php echo base_url('pemohon/daftar'); ?>">Tambah Pemohon</a></li>
-            </ul>
 
-        </li>
-        <li class="xn-openable">
-            <a href="#"><i class="fa fa-user-md"></i> <span class="xn-text">Petugas Analisis</span></a>
-            <ul>
-                <li><a href="<?php echo base_url('petugas'); ?>">List Petugas Analisis</a></li>
-                <li class="divider"></li>
-                <li><a href="<?php echo base_url('petugas/daftar'); ?>">Tambah Petugas Analisis</a></li>
-            </ul>
-        </li>
-        <li>
-            <a href="<?php echo base_url('type_analisis'); ?>"><i class="fa fa-flask"></i> <span class="xn-text"> Type Analisis</span></a>
-        </li>
+        <?php
+
+            $sidebar_menu = 'admin';
+
+            $komoditi = array(
+                'bb',
+                'lg',
+                'nl',
+                'pb'
+            );
+
+            if(in_array($this->session->userdata('komoditi'), $komoditi))
+            {
+                $sidebar_menu = 'petugas';
+            }
+            elseif($this->session->userdata('komoditi') == 'pp')
+            {
+                $sidebar_menu = 'preparasi';
+            }
+            elseif($this->session->userdata('komoditi') == 'pw')
+            {
+                $sidebar_menu = 'previewer';
+            }
+
+            $this->load->view('include/sidebar_menu_' . $sidebar_menu);
+
+        ?>
+
     </ul>
     <!-- END X-NAVIGATION -->
 </div>

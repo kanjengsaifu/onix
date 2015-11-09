@@ -2,15 +2,20 @@
 
 class Conto extends PS_Controller
 {
-    private $analisis;
-    private $conto;
+    var $analisis;
+    var $conto;
+    var $type_analisis_nilai = array('fmbbj', 'fmbdk');
+    var $type_analisis_deskripsi = array('fmbab', 'fmbmb', 'fmbmn', 'fmbpb');
+    var $id_type_analisis;
+
 
     public function __construct()
     {
         parent::__construct();
         $this->load->model(array(
             'conto_m',
-            'analisis_m'
+            'analisis_m',
+            'metoda_m'
         ));
     }
 
@@ -42,38 +47,26 @@ class Conto extends PS_Controller
     {
         $conto = $this->conto;
         $analisis = $this->analisis;
-        $analisis_parameter = $this->analisis_m->parameter($analisis->id);
-        $conto_parameter = $this->conto_m->parameter($conto->id);
 
-        $this->load->model('parameter_m');
-        foreach($analisis_parameter as $key => $row_parameter)
+        $this->load->model(['parameter_m', 'type_analisis_m']);
+        $analisis_type_analisis = $this->analisis_m->type_analisis($analisis->id);
+
+        foreach($analisis_type_analisis as $key => $row_type_analisis)
         {
-            $parameter = $this->parameter_m->find($row_parameter->id_parameter);
-            $nilai = 0;
-            $deskripsi = $parameter->deskripsi;
+            $type_analisis = $this->type_analisis_m->find($row_type_analisis->id_type_analisis);
+            $parameter = $this->conto_m->parameter_by_type_analisis($conto->id, $type_analisis->id);
+            $analisis_type_analisis[$key]->nama = $type_analisis->nama;
+            $analisis_type_analisis[$key]->parameter = $parameter;
 
-            if(count($conto_parameter) > 0)
-            {
-                $nilai = $conto_parameter[$key]->nilai;
-                $deskripsi = $conto_parameter[$key]->deskripsi;
-
-            }
-
-            $analisis_parameter[$key]->nama = $parameter->nama;
-            $analisis_parameter[$key]->nilai = $nilai;
-            $analisis_parameter[$key]->deskripsi = $deskripsi;
         }
 
-        $analisis_conto = $this->conto_m->by_analisis($analisis->id);
-
         $data = array(
-            'title'                 => 'Conto Kimia | ' . $conto->id_conto,
+            'title'                 => 'Conto Kimia | ' . $conto->nomor_conto,
             'main_content'          => 'conto/detail_conto_kimia_v',
             'nomor_analisis'        => $analisis->nomor_analisis,
             'conto'                 => $conto,
             'analisis'              => $analisis,
-            'analisis_conto'        => $analisis_conto,
-            'analisis_parameter'    => $analisis_parameter
+            'analisis_type_analisis'=> $analisis_type_analisis
 
         );
 
@@ -87,21 +80,13 @@ class Conto extends PS_Controller
     {
         $conto = $this->conto;
         $analisis = $this->analisis;
-        $analisis_type_analisis = $this->analisis_m->type_analisis($conto->id_analisis);
-        $conto_type_analisis = $this->conto_m->type_analisis($conto->id);
+        $conto_detail_fisika = $this->conto_m->type_analisis($conto->id);
 
         $this->load->model('type_analisis_m');
-        foreach($analisis_type_analisis as $key => $row_type_analisis)
+        foreach($conto_detail_fisika as $key => $row_type_analisis)
         {
             $type_analisis = $this->type_analisis_m->find($row_type_analisis->id_type_analisis);
-            $analisis_type_analisis[$key]->nama = $type_analisis->nama;
-            $analisis_type_analisis[$key]->nilai = $conto_type_analisis[$key]->nilai;
-            $analisis_type_analisis[$key]->foto_1 = $conto_type_analisis[$key]->foto_1;
-            $analisis_type_analisis[$key]->foto_2 = $conto_type_analisis[$key]->foto_2;
-            $analisis_type_analisis[$key]->deskripsi_1 = $conto_type_analisis[$key]->deskripsi_1;
-            $analisis_type_analisis[$key]->deskripsi_2 = $conto_type_analisis[$key]->deskripsi_2;
-            $analisis_type_analisis[$key]->d_mikroskopis = $conto_type_analisis[$key]->d_mikroskopis;
-            $analisis_type_analisis[$key]->komposisi = $conto_type_analisis[$key]->komposisi;
+            $conto_detail_fisika[$key]->nama = $type_analisis->nama;
         }
 
         $analisis_conto = $this->conto_m->by_analisis($analisis->id);
@@ -113,25 +98,78 @@ class Conto extends PS_Controller
             'conto'                     => $conto,
             'analisis'                  => $analisis,
             'analisis_conto'            => $analisis_conto,
-            'analisis_type_analisis'    => $analisis_type_analisis
+            'conto_detail_fisika'       => $conto_detail_fisika
 
         );
 
         $this->load->view('template', $data);
     }
 
+    public function update_kode_conto()
+    {
+        $this->conto_m->update_kode_conto($this->input->post());
+        echo 1;
+    }
+
     /**
      * @param $id_conto
+     * @param bool $id_conto_detail_fisika
      */
-    public function analisis($id_conto)
+    public function analisis($id_conto, $id_conto_detail_fisika = FALSE)
     {
         $conto = $this->conto_m->find($id_conto);
         $analisis = $this->analisis_m->find($conto->id_analisis);
         $is_fisika = $this->is_fisika($analisis->id_lab) ? TRUE : FALSE;
+
+        $this->conto = $conto;
+        $this->analisis = $analisis;
+
         if($is_fisika)
         {
-            redirect('conto/detail_fisika/' . $id_conto);
+            $this->_analisis_fisika($id_conto_detail_fisika);
         }
+        else
+        {
+            $this->_analisis_kimia($id_conto);
+        }
+    }
+
+    private function _analisis_fisika($id_detail_conto_fisika)
+    {
+        $this->load->model(['type_analisis_m', 'reference_m']);
+        $conto_detail_fisika = $this->conto_m->find_detail_conto_fisika($id_detail_conto_fisika);
+        $type_analisis = $this->type_analisis_m->find($conto_detail_fisika->id_type_analisis);
+
+        if (!file_exists(APPPATH."views/conto/form_isi/fisika/$type_analisis->id_type_analisis.php"))
+        {
+            redirect('conto/detail/' . $this->conto->id);
+            exit;
+        }
+
+        $minerals = $this->reference_m->all('mineral');
+
+        $nilai = (array) json_decode($conto_detail_fisika->nilai);
+        $is_empty_nilai = empty($nilai) ? TRUE : FALSE;
+
+        $data = array(
+            'title'                 => 'Conto | '.$this->conto->id,
+            'main_content'          => 'conto/form_isi/fisika',
+            'nomor_analisis'        => $this->analisis->nomor_analisis,
+            'analisis'              => $this->analisis,
+            'conto'                 => $this->conto,
+            'conto_detail_fisika'   => $conto_detail_fisika,
+            'type_analisis'         => $type_analisis,
+            'minerals'              => $minerals,
+            'nilai'                 => $nilai,
+            'is_empty_nilai'        => $is_empty_nilai
+        );
+
+        $this->load->view('template', $data);
+    }
+    private function _analisis_kimia($id_conto)
+    {
+        $conto = $this->conto;
+        $analisis = $this->analisis;
 
         $analisis_parameter = $this->analisis_m->parameter($analisis->id);
         $conto_parameter = $this->conto_m->parameter($conto->id);
@@ -139,9 +177,9 @@ class Conto extends PS_Controller
         $this->load->model('parameter_m');
         foreach($analisis_parameter as $key => $row_parameter)
         {
-            $parameter = $this->parameter_m->find($row_parameter->id_parameter);
+            $parameter = $this->parameter_m->find_type_analisis_parameter($row_parameter->id_type_analisis_parameter);
 
-            $analisis_parameter[$key]->nama = $parameter->nama;
+            $analisis_parameter[$key]->nama = $parameter->nama_parameter;
             $analisis_parameter[$key]->id_parameter_conto = $conto_parameter[$key]->id;
             $analisis_parameter[$key]->nilai = $conto_parameter[$key]->nilai;
             $analisis_parameter[$key]->deskripsi = $conto_parameter[$key]->deskripsi;
@@ -166,9 +204,8 @@ class Conto extends PS_Controller
     /**
      * Insert Conto
      */
-    public function insert()
+    public function insert($id_analisis)
     {
-        $id_analisis = $this->input->post('id');
         $analisis = $this->analisis_m->find($id_analisis);
         $count_conto = $this->conto_m->count_conto_by_analisis($id_analisis);
 
@@ -185,12 +222,8 @@ class Conto extends PS_Controller
 
             if($this->is_fisika($analisis->id_lab))
             {
-                $input = array(
-                    'id_conto'          => $insert,
-                    'id_type_analisis'  => NULL
-                );
-
-                $this->conto_m->insert_detail_fisika($input);
+                $analisis_type_analisis = $this->analisis_m->type_analisis($id_analisis);
+                $this->conto_m->insert_batch_type_analisis($insert, $analisis_type_analisis);
             }
             else
             {
@@ -219,5 +252,62 @@ class Conto extends PS_Controller
         {
             echo 0;
         }
+    }
+
+    public function update_nilai_fisika()
+    {
+        $this->conto_m->update_nilai_fisika($this->input->post());
+        redirect('conto/analisis/' . $this->input->post('id_conto') . '/' . $this->input->post('id'));
+    }
+
+    public function set_selesai()
+    {
+        $input = $this->input->post();
+        $input['value'] = TRUE;
+        $this->conto_m->set_selesai($input);
+
+        redirect('conto/detail/' . $this->input->post('id'));
+    }
+
+    public function set_unselesai()
+    {
+        $input = $this->input->post();
+        $input['value'] = FALSE;
+        $this->conto_m->set_selesai($input);
+
+        redirect('conto/detail/' . $this->input->post('id'));
+    }
+
+    /**
+     * Create all conto by much conto
+     */
+    public function insert_batch()
+    {
+        $id_analisis = $this->input->post('id');
+        $analisis = $this->analisis_m->find($id_analisis);
+
+        for($i=1; $i<=$analisis->jumlah_conto; $i++)
+        {
+            $nomor_conto = !$this->conto_m->new_nomor_conto_by_analisis($id_analisis) ? $analisis->nomor_analisis : $this->conto_m->new_nomor_conto_by_analisis($id_analisis);
+            $input = array(
+                'nomor_conto'    => $nomor_conto,
+                'id_analisis'    => $id_analisis
+            );
+
+            $insert = $this->conto_m->insert($input);
+
+            if($this->is_fisika($analisis->id_lab))
+            {
+                $analisis_type_analisis = $this->analisis_m->type_analisis($id_analisis);
+                $this->conto_m->insert_batch_type_analisis($insert, $analisis_type_analisis);
+            }
+            else
+            {
+                $analisis_parameter = $this->analisis_m->parameter($id_analisis);
+                $this->conto_m->insert_batch_parameter($insert, $analisis_parameter);
+            }
+        }
+
+        redirect('permohonan/conto/'.$id_analisis);
     }
 }

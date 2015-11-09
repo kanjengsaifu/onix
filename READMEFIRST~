@@ -1,0 +1,4 @@
+[ 1 ] Update labs.js
+
+var link = "http://localhost/psdg/analisis/"; -> Alamat Server
+var base_url = "http://localhost/psdg/";

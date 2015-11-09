@@ -1,3 +1,4 @@
-[?] ai metode uji kuat tekan apa aja ?
-[?] berat di mineral butir
-[o] tampilan fmbmr maseral di detail conto sertifikat
+[ 1 ] Update labs.js
+
+var link = "http://localhost/psdg/analisis/"; -> Alamat Server
+var base_url = "http://localhost/psdg/"; -> Alamat Server

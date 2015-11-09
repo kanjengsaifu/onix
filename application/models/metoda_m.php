@@ -31,6 +31,31 @@ class Metoda_m extends CI_Model
                         ->result();
     }
 
+    public function insert($input)
+    {
+        $data = [
+            'nama'    => $input['nama'],
+            'id_laboratorium'    => $input['id_lab'],
+            'created_date'  => now()
+        ];
+
+        $insert = $this->db->insert('metoda', $data);
+
+        $return = $insert ? $this->db->insert_id() : FALSE;
+
+        return $return;
+    }
+
+    public function update($input)
+    {
+        $data = [
+            'nama'    => $input['nama'],
+            'id_laboratorium'    => $input['id_lab']
+        ];
+
+        return $this->db->where('id_metoda', $input['id'])->update('metoda', $data);
+    }
+
     public function by_lab($id_lab ='fmb')
     {
         return $this->db->where('id_laboratorium', $id_lab)->order_by('nama', 'ASC')->get('metoda')->result();

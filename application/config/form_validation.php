@@ -21,10 +21,10 @@ $config = array(
             'rules' => 'trim|required'
         )
     ),
-    'pemohon' => array(
+    'pemohon/create' => array(
         array(
-            'field' => 'id',
-            'label' => 'ID Pemohon',
+            'field' => 'type_pemohon',
+            'label' => 'Type Pemohon',
             'rules' => 'required|trim'
         ),
         array(
@@ -48,7 +48,7 @@ $config = array(
             'rules' => 'trim'
         )
     ),
-    'petugas/daftar'   => array(
+    'petugas/create'   => array(
         array(
             'field' => 'nip',
             'label' => 'Nomor Induk Pegawai',
@@ -70,9 +70,14 @@ $config = array(
             'rules' => 'required|trim'
         ),
         array(
-            'field' => 'komoditi',
+            'field' => 'id_komoditi',
             'label' => 'Komoditi',
             'rules' => 'required|trim'
+        ),
+        array(
+            'field' => 'bagian',
+            'label' => 'Bagian',
+            'rules' => 'trim'
         ),
     ),
     'petugas/detail'   => array(
@@ -82,36 +87,26 @@ $config = array(
             'rules' => 'required|trim'
         ),
         array(
-            'field' => 'telepon',
-            'label' => 'Nomor Telepon',
-            'rules' => 'required|trim|numeric'
-        ),
-        array(
-            'field' => 'email',
-            'label' => 'Email',
-            'rules' => 'required|trim|valid_email'
-        ),
-        array(
-            'field' => 'komoditi',
+            'field' => 'id_komoditi',
             'label' => 'Komoditi',
             'rules' => 'required|trim'
         ),
-    ),
-    'parameter/tambah'      => array(
         array(
-            'field' => 'id_parameter',
-            'label' => 'ID Parameter',
-            'rules' => 'required|max_length[7]|is_unique[parameter.id_parameter]'
+            'field' => 'bagian',
+            'label' => 'Bagian',
+            'rules' => 'trim'
         ),
+    ),
+    'parameter/create'      => array(
         array(
             'field' => 'nama',
             'label' => 'Nama Parameter',
-            'rules' => $base_validation
+            'rules' => $base_validation."|is_unique[parameter.nama]"
         ),
         array(
             'field' => 'harga',
-            'label' => 'Harga Analisis Parameter',
-            'rules' => 'integer'
+            'label' => 'Harga Parameter',
+            'rules' => 'trim|xss_clean|integer'
         ),
         array(
             'field' => 'satuan',
@@ -127,7 +122,7 @@ $config = array(
     'permohonan/tambah' => array(
         array(
             'field' => 'id_pemohon',
-            'label' => 'Nama Perusahaan',
+            'label' => 'Pemohon',
             'rules' => 'required'
         ),
         array(
@@ -141,14 +136,14 @@ $config = array(
             'rules' => 'required|numeric'
         ),
         array(
-            'field' => 'lokasi',
-            'label' => 'Lokasi',
+            'field' => 'provinsi',
+            'label' => 'Provinsi',
             'rules' => 'required'
         ),
         array(
-            'field' => 'kode_conto',
-            'label' => 'Kode Conto',
-            'rules' => 'required|trim|max_length[5]'
+            'field' => 'lokasi',
+            'label' => 'Lokasi',
+            'rules' => 'required'
         ),
         array(
             'field' => 'tanggal_terima',
@@ -188,11 +183,6 @@ $config = array(
             'rules' => 'required'
         ),
         array(
-            'field' => 'kode_conto',
-            'label' => 'Kode Conto',
-            'rules' => 'required|trim|max_length[5]'
-        ),
-        array(
             'field' => 'tanggal_terima',
             'label' => 'Tanggal Conto Diterima',
             'rules' => 'required'
@@ -202,5 +192,190 @@ $config = array(
             'label' => 'Alamat',
             'rules' => 'trim|required'
         )
-    )
+    ),
+    'type_analisis/create' => [
+        [
+            'field' => 'id_lab',
+            'label' => 'Laboratorium',
+            'rules' => $base_validation
+        ],
+        [
+            'field' => 'id_type_analisis',
+            'label' => 'ID type Analisis',
+            'rules' => $base_validation.'|max_length[5]|is_unique[type_analisis.id_type_analisis]'
+        ],
+        [
+            'field' => 'nama',
+            'label' => 'Nama',
+            'rules' => $base_validation
+        ],
+        [
+            'field' => 'harga',
+            'label' => 'Harga',
+            'rules' => $base_validation.'|integer'
+        ],
+        [
+            'field' => 'deskripsi',
+            'label' => 'Deskripsi',
+            'rules' => 'trim|xss_clean'
+        ]
+    ],
+    'type_analisis/insert_type_analisis_parameter' => [
+        [
+            'field' => 'id_parameter',
+            'label' => 'Parameter',
+            'rules' => $base_validation
+        ],
+        [
+            'field' => 'harga',
+            'label' => 'Harga',
+            'rules' => 'trim|xss_clean|integer'
+        ],
+        [
+            'field' => 'satuan',
+            'label' => 'Satuan',
+            'rules' => 'trim|xss_clean'
+        ],
+    ],
+    'type_analisis/update_prosedur' => [
+        [
+            'field' => 'keterangan_total_waktu',
+            'label' => 'Keterangan total waktu',
+            'rules' => 'xss_clean'
+        ],
+        [
+            'field' => 'keterangan_prosedur',
+            'label' => 'Keterangan Prosedur',
+            'rules' => 'xss_clean'
+        ],
+        [
+            'field' => 'keterangan',
+            'label' => 'Keterangan',
+            'rules' => 'xss_clean'
+        ]
+    ],
+    'type_analisis/insert_prosedur_kegiatan' => [
+        [
+            'field' => 'kegiatan',
+            'label' => 'Kegiatan',
+            'rules' => 'required'
+        ],
+        [
+            'field' => 'pelaksana',
+            'label' => 'Pelaksana',
+            'rules' => 'required'
+        ],
+        [
+            'field' => 'kelengkapan',
+            'label' => 'Kelengkapan',
+            'rules' => 'required'
+        ],
+        [
+            'field' => 'keluaran',
+            'label' => 'Keluaran',
+            'rules' => 'required'
+        ],
+        [
+            'field' => 'is_perhari',
+            'label' => 'Perhari',
+            'rules' => 'xss_clean'
+        ],
+        [
+            'field' => 'waktu',
+            'label' => 'Waktu',
+            'rules' => 'number'
+        ],
+        [
+            'field' => 'hari',
+            'label' => 'hari',
+            'rules' => 'number'
+        ],
+        [
+            'field' => 'jumlah_conto',
+            'label' => 'Jumlah Conto',
+            'rules' => 'number'
+        ],
+        [
+            'field' => 'keterangan',
+            'label' => 'Keterangan',
+            'rules' => 'xss_clean'
+        ],
+        [
+            'field' => 'prosedur_khusus',
+            'label' => 'Prosedur Khusus',
+            'rules' => 'xss_clean'
+        ]
+    ],
+    'message/send' => [
+        [
+            'field' => 'checkall',
+            'label' => 'checkall',
+            'rules' => 'xss_clean'
+        ],
+        [
+            'field' => 'to',
+            'label' => 'Penerima',
+            'rules' => 'required|xss_clean'
+        ],
+        [
+            'field' => 'message',
+            'label' => 'Message',
+            'rules' => $base_validation
+        ],
+        [
+            'field' => 'subject',
+            'label' => 'Subject',
+            'rules' => 'xss_clean'
+        ]
+    ],
+    'lokasi/insert_provinsi' => [
+        [
+            'field' => 'nama',
+            'label' => 'Nama Provinsi',
+            'rules' => $base_validation.'|is_unique[provinsi.nama]'
+        ]
+    ],
+    'lokasi/insert_kabupaten' => [
+        [
+            'field' => 'id_provinsi',
+            'label' => 'Provinsi',
+            'rules' => 'required|xss_clean'
+        ],
+        [
+            'field' => 'nama',
+            'label' => 'Nama Kabupaten',
+            'rules' => $base_validation.'|is_unique[provinsi.nama]'
+        ]
+    ],
+    'lokasi/update_provinsi' => [
+        [
+            'field' => 'nama',
+            'label' => 'Nama Provinsi',
+            'rules' => $base_validation.'|is_unique[provinsi.nama]'
+        ]
+    ],
+    'lokasi/update_kabupaten' => [
+        [
+            'field' => 'id_provinsi',
+            'label' => 'Provinsi',
+            'rules' => 'required|xss_clean'
+        ],
+        [
+            'field' => 'nama',
+            'label' => 'Nama Kabupaten',
+            'rules' => $base_validation.'|is_unique[provinsi.nama]'
+        ]
+    ],
+    'metoda/create' => [
+        [
+            'field' => 'nama',
+            'label' => 'Nama Metoda',
+            'rules' => $base_validation.'|is_unique[metoda.nama]'
+        ],
+        [
+            'field' => 'id_lab',
+            'label' => 'Laboratorium',
+            'rules' => $base_validation
+        ]
+    ]
 );

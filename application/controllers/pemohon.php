@@ -5,7 +5,7 @@
  * Date: 10/22/13
  * Time: 8:46 AM
  */
-class Pemohon extends CI_Controller
+class Pemohon extends PS_Controller
 {
 
     public function __construct()
@@ -19,7 +19,6 @@ class Pemohon extends CI_Controller
         $pemohon = $this->pemohon_m->all();
 
         $js = array(
-            'datatables/jquery.dataTables.min'
         );
 
         $data = array(
@@ -32,39 +31,33 @@ class Pemohon extends CI_Controller
         $this->load->view('template', $data);
     }
 
-    public function add()
+    /**
+     * Creting Pemohon
+     */
+    public function create()
     {
         $this->load->library('form_validation');
         $type_pemohon = $this->pemohon_m->get_all_type_pemohon();
 
-        if($this->form_validation->run('pemohon') == FALSE)
+        if($this->form_validation->run())
         {
-            $data = array(
-                'title'         => 'Daftar',
-                'main_content'  => 'pemohon/t_pemohon_v',
-                'type_pemohon'  => $type_pemohon
-            );
+            $this->pemohon_m->insert($this->input->post());
+            redirect('pemohon');
 
-            $this->load->view('template_input', $data);
         }
         else
         {
-            $simpan = $this->pemohon_m->insert($this->input->post());
+            $js = array(
+            );
 
-            if($simpan == TRUE)
-            {
-                redirect('pemohon');
-            }
-            else
-            {
-                $data = array(
-                    'title'         => 'Daftar',
-                    'main_content'  => 'pemohon/t_pemohon_v',
-                    'type_pemohon'  => $type_pemohon
-                );
+            $data = array(
+                'title'         => 'Daftar',
+                'main_content'  => 'pemohon/t_pemohon_v',
+                'js'            => $js,
+                'type_pemohon'  => $type_pemohon
+            );
 
-                $this->load->view('template_input', $data);
-            }
+            $this->load->view('template', $data);
         }
     }
 
@@ -80,14 +73,15 @@ class Pemohon extends CI_Controller
 
         $this->load->library('form_validation');
 
-        if($this->form_validation->run('pemohon'))
+        if($this->form_validation->run('pemohon/create'))
         {
-            $this->pemohon_m->ubah();
+            $this->pemohon_m->update();
+            redirect('pemohon/detail/' . $this->input->post('id'));
         }
 
-        $this->load->model('hasil_analisis_m');
+        $this->load->model('analisis_m');
         $type_pemohon = $this->pemohon_m->get_all_type_pemohon();
-        $hasil_analisis = $this->hasil_analisis_m->by_id_pemohon($pemohon->id_pemohon);
+        $hasil_analisis = $this->analisis_m->by_id_pemohon($pemohon->id_pemohon);
 
         $data = array(
             'title'         => 'Ubah Data Pemohon',

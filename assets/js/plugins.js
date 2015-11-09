@@ -190,17 +190,27 @@ $(function() {
         //Datatables
         var uiDatatable = function(){
             if($(".datatable").length > 0){
-                $(".datatable").dataTable();
+                $(".datatable").dataTable({"iDisplayLength": 25});
                 $(".datatable").on('page.dt',function () {
                     onresize(100);
                 });
             }
 
             if($(".datatable_simple").length > 0){
-                $(".datatable_simple").dataTable({"ordering": false, "info": false, "lengthChange": false,"searching": false});
+                $(".datatable_simple").dataTable({"ordering": false, "info": false, "lengthChange": false,"searching": false, "iDisplayLength": 25});
                 $(".datatable_simple").on('page.dt',function () {
                     onresize(100);
                 });
+            }
+
+            if($(".datatable_withfilter").length > 0){
+                $(".datatable_withfilter").dataTable({"ordering": false, "info": false, "lengthChange": false,"searching": true, "iDisplayLength": 25});
+                $(".datatable_withfilter").on('page.dt',function () {
+                    onresize(100);
+                });
+                $('.dataTables_filter').css('float', 'left');
+                $('.dataTables_filter').css('width', '100%');
+
             }
         }//END Datatable
 
@@ -366,14 +376,11 @@ $(function() {
             /* Lite summernote editor */
             if($(".summernote_lite").length > 0){
 
-                $(".summernote_lite").on("focus",function(){
 
-                    $(".summernote_lite").summernote({height: 100, focus: true,
-                        toolbar: [
-                            ["style", ["bold", "italic", "underline", "clear"]],
-                            ["insert",["link","picture","video"]]
-                        ]
-                    });
+                $(".summernote_lite").summernote({height: 100, focus: true,
+                    toolbar: [
+                        ["style", ["bold", "italic", "underline", "clear"]]
+                    ]
                 });
             }
             /* END Lite summernote editor */
@@ -426,7 +433,7 @@ $(function() {
                 uiDatatable();
                 uiRangeSlider();
                 uiKnob();
-                uiSmartWizard();
+//                uiSmartWizard();
                 uiOwlCarousel();
                 uiSummernote();
                 uiScroller();
@@ -643,3 +650,4 @@ Object.size = function(obj) {
     }
     return size;
 };
+

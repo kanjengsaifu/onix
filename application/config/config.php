@@ -246,7 +246,7 @@ $config['encryption_key'] = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNO
 |
 */
 $config['sess_cookie_name']		= 'unleashed';
-$config['sess_expiration']		= 7200;
+$config['sess_expiration']		= 21600;
 $config['sess_expire_on_close']	= FALSE;
 $config['sess_encrypt_cookie']	= TRUE;
 $config['sess_use_database']	= TRUE;

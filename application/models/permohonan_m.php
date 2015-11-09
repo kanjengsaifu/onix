@@ -13,19 +13,77 @@ class Permohonan_m extends CI_Model
         parent::__construct();
     }
 
-
-    public function get_by_type($id_type)
+    public function by_time($from, $to)
     {
-        $q = $this->db->query("SELECT is_selesai, id_analisis, jenis_contoh, tanggal_terima, id_pemohon, biaya, id_lab, lokasi FROM hasil_analisis WHERE SUBSTRING(id_pemohon,1,1)='$id_type' ORDER BY created_at DESC");
-
-        return $q->result();
+        return $this->db->join('pemohon', 'analisis.id_pemohon = pemohon.id_pemohon')
+            ->join('laboratorium', 'analisis.id_lab = laboratorium.id_lab')
+            ->select('analisis.*, pemohon.nama as nama_pemohon, laboratorium.nama as lab')
+            ->where('DATE(created_date) >=', $from)
+            ->where('DATE(created_date) <=', $to)
+            ->get('analisis')
+            ->result();
     }
 
-    public function get_by_pemohon($id_pemohon)
+    public function set_cancel($input)
     {
-        $q = $this->db->query("SELECT is_selesai, id_analisis, jenis_contoh, tanggal_terima, id_pemohon, biaya, id_lab, lokasi, is_selesai FROM hasil_analisis WHERE id_pemohon='$id_pemohon' ORDER BY created_at DESC");
+        $data = [
+            'is_cancel' => 1
+        ];
 
-        return $q->result();
+        return $this->db->where('id', $input['id'])->update('analisis', $data);
     }
 
+    public function unset_cancel($input)
+    {
+        $data = [
+            'is_cancel' => 0
+        ];
+
+        return $this->db->where('id', $input['id'])->update('analisis', $data);
+    }
+
+    public function update_nomor_sertifikat($input)
+    {
+        $data = [
+            'nomor_sertifikat' => $input['nomor_sertifikat']
+        ];
+
+        return $this->db->where('id', $input['id'])->update('analisis', $data);
+    }
+
+    public function update_tanggal_analisis($input)
+    {
+        $data = [
+            'tanggal_analisis' => $input['tanggal_analisis']
+        ];
+
+        return $this->db->where('id', $input['id'])->update('analisis', $data);
+    }
+
+    public function update_tanggal_publish($input)
+    {
+        $data = [
+            'tanggal_publish' => $input['tanggal_publish']
+        ];
+
+        return $this->db->where('id', $input['id'])->update('analisis', $data);
+    }
+
+    public function update_estimasi_date($input)
+    {
+        $data = [
+            'estimasi_date' => $input['estimasi_date']
+        ];
+
+        return $this->db->where('id', $input['id'])->update('analisis', $data);
+    }
+
+    public function update_logo_kan($input)
+    {
+        $data = [
+            'logo_kan'  => empty($input['logo_kan']) ? 0 : 1
+        ];
+
+        return $this->db->where('id', $input['id'])->update('analisis', $data);
+    }
 }

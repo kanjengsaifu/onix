@@ -1,13 +1,13 @@
 <!-- START BREADCRUMB -->
 <ul class="breadcrumb">
     <li><a href="#">Home</a></li>
-    <li class="active">Petugas</li>
+    <li class="active">Permohonan</li>
 </ul>
 <!-- END BREADCRUMB -->
 
 <!-- PAGE TITLE -->
 <div class="page-title">
-    <h2><span class="fa fa-list"></span> Permohonan</h2>
+    <h2><span class="fa fa-user"></span> Pilih Pemohon</h2>
 </div>
 <!-- END PAGE TITLE -->
 
@@ -49,22 +49,20 @@
             <div class="panel-heading">
                 <h3 class="panel-title">Listing Pemohon</h3>
                 <ul class="panel-controls">
-                    <li><a href="<?php echo base_url('pemohon/add'); ?>" title="Tambah Pemohon"><span class="fa fa-plus"></span></a></li>
+                    <li data-placement="top" data-toggle="tooltip" data-original-title="Tambah pemohon">
+                        <a href="<?php echo base_url('pemohon/create'); ?>" ><span class="fa fa-plus"></span></a>
+                    </li>
                 </ul>
             </div>
             <div class="panel-body">
                 <table class="table datatable">
                     <thead>
                     <tr>
-                        <th>NO</th>
-                        <th>Tipe</th>
+                        <th>#</th>
                         <th>Nama</th>
+                        <th>Tipe Pemohon</th>
                         <th>Alamat</th>
-                        <?php if($this->tinyauth->is_admin()): ?>
-                            <th>Username</th>
-                            <th>Password</th>
-                            <th>Pilih</th>
-                        <?php endif; ?>
+                        <th>Aksi</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -74,16 +72,12 @@
                         ?>
                         <tr>
                             <td><?php echo $no++; ?>.</td>
-                            <td><?php echo strtoupper($row->type_pemohon); ?></td>
                             <td><?php echo $row->nama; ?></td>
+                            <td><?php echo strtoupper($row->type_pemohon); ?></td>
                             <td><?php echo $row->alamat; ?></td>
-                            <?php if($this->tinyauth->is_admin()): ?>
-                                <td><?php echo $row->username; ?></td>
-                                <td><?php echo $row->pass_awal; ?></td>
-                                <td>
-                                    <a href="<?php echo base_url('permohonan/set_pemohon/'.$row->id_pemohon); ?>" class="btn btn-primary btn-xs">Pilih</a>
-                                </td>
-                            <?php endif; ?>
+                            <td>
+                                <a href="<?php echo base_url('permohonan/set_pemohon/'.$row->id_pemohon); ?>" class="btn btn-warning">Pilih</a>
+                            </td>
                         </tr>
                     <?php
                     endforeach;
@@ -92,7 +86,6 @@
                 </table>
             </div>
         </div>
-
     </div>
 </div>
 

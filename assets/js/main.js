@@ -39,10 +39,7 @@ $(".fancybox-thumb").fancybox({
     }
 });
 
-$('#btn-back').click(function(e){
-    parent.history.back();
-    e.preventDefault();
-});
+
 
 $('#btn-reset-permohonan').click(function(e){
     e.preventDefault();
@@ -65,6 +62,7 @@ $(".fancybox-thumb")
     .fancybox({
         padding : 0
     });
+
 
 
 
@@ -155,6 +153,7 @@ $('.proses-table').dataTable({
     $('#search-box-kp').keyup(function(){
         kpTable.fnFilter(  this.value );
     });
+
 
 
 

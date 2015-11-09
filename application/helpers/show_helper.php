@@ -274,3 +274,42 @@ function WriteHTML($html)
         }
     }
 }
+
+function label_status_preparasi($status)
+{
+    switch($status)
+    {
+        case '1':
+            $status = 'Terima';
+            break;
+        case '2':
+            $status = 'Proses';
+            break;
+        case '3':
+            $status = 'Selesai';
+            break;
+        default:
+            $status = 'Pending';
+            break;
+    }
+
+    return $status;
+}
+
+function task_status($status)
+{
+    switch($status)
+    {
+        case '0':
+            $status = 'proses';
+            break;
+        case '1':
+            $status = 'success';
+            break;
+        default:
+            $status = 'info';
+            break;
+    }
+
+    return 'task-' . $status;
+}

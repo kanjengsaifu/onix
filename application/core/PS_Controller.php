@@ -2,12 +2,12 @@
 
 class PS_Controller extends CI_Controller
 {
-
     public $is_fisika = FALSE;
 
     public function __construct()
     {
         parent::__construct();
+        require_once(APPPATH . 'libraries/prosedur.php');
 
         if($this->tinyauth->logged_in())
         {
@@ -30,5 +30,55 @@ class PS_Controller extends CI_Controller
 
         return in_array($id_type_pemohon, $array_pihak_luar);
     }
+}
 
+/**
+ * Class Admin_controller
+ */
+class Admin_controller extends PS_Controller
+{
+    public function __construct()
+    {
+        parent::__construct();
+
+        if(!in_array($this->session->userdata('komoditi'), ['tu', 'pw']))
+        {
+            redirect(base_url());
+        }
+    }
+}
+
+class Petugas_controller extends PS_Controller
+{
+    public function __construct()
+    {
+        parent::__construct();
+
+        $komoditi = array(
+            'bb',
+            'lg',
+            'nl',
+            'pb'
+        );
+
+        if(!in_array($this->session->userdata('komoditi'), $komoditi))
+        {
+            redirect(base_url());
+        }
+    }
+}
+
+class Preparasi_controller extends PS_Controller
+{
+    public function __construct()
+    {
+
+        parent::__construct();
+        $this->load->model(array('preparasi_m'));
+
+        if(!$this->session->userdata('komoditi') == 'pp')
+        {
+            redirect(base_url());
+        }
+    }
 }

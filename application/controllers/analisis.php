@@ -5,8 +5,10 @@
  * Date: 9/18/13
  * Time: 8:27 PM
  */
-class Analisis extends PS_Controller
+class Analisis extends Petugas_controller
 {
+
+    public $have_metoda = array('kpb', 'knl');
 
     public function __construct()
     {
@@ -18,7 +20,8 @@ class Analisis extends PS_Controller
             'metoda_m',
             'komoditi_m',
             'lab_m',
-            'conto_m'
+            'conto_m',
+            'reference_m'
         ));
     }
 
@@ -29,7 +32,8 @@ class Analisis extends PS_Controller
     {
         $id_komoditi = $this->session->userdata('komoditi');
         $komoditi = $this->komoditi_m->find($id_komoditi);
-        $lab = $this->lab_m->lab_by_komoditi($id_komoditi);
+        $lab = $this->lab_m->by_komoditi($id_komoditi);
+        $jumlah_analisis_tersimpan = 0;
 
         foreach($lab as $key => $row)
         {
@@ -43,16 +47,19 @@ class Analisis extends PS_Controller
             {
                 $lab[$key]->jumlah_permohonan_selesai += $row_selesai->is_selesai ? 1 : 0;
             }
+
+            $jumlah_analisis_tersimpan += count($permohonan);
         }
 
         $data = array(
-            'title'         => strtoupper($komoditi->nama),
+            'title'         => $komoditi->nama,
             'main_content'  => 'analisis/komoditi_v',
             'lab'           => $lab,
-            'nama_komoditi' => $komoditi->nama
+            'nama_komoditi' => $komoditi->nama,
+            'jumlah_analisis_tersimpan'     => $jumlah_analisis_tersimpan
         );
 
-        $this->load->view('template_input', $data);
+        $this->load->view('template', $data);
     }
 
     /**
@@ -64,16 +71,18 @@ class Analisis extends PS_Controller
 
         $lab = $this->lab_m->find($id_lab);
         $analisis = $this->analisis_m->by_laboratorium($id_lab);
+        $permohonan_bulan_ini = $this->analisis_m->by_month(date('m'));
 
         $data = array(
             'title'         => $lab->nama,
             'main_content'  => 'analisis/analisis_v',
             'analisis'      => $analisis,
+            'permohonan_bulan_ini'  => $permohonan_bulan_ini,
             'is_fisika'     => $is_fisika,
             'lab'           => $lab
         );
 
-        $this->load->view('template_input', $data);
+        $this->load->view('template', $data);
     }
 
     /**
@@ -81,14 +90,137 @@ class Analisis extends PS_Controller
      */
     public function detail($id)
     {
+        $this->load->model(['analisis_tracking_m', 'prosedur_m']);
+
         $analisis = $this->analisis_m->find($id);
         $conto = $this->conto_m->by_analisis($id);
+        $count_conto_added = $this->conto_m->count_conto_added_by_analisis($id);
         $count_conto_selesai = $this->conto_m->count_conto_selesai_by_analisis($id);
+        $last_track = $this->analisis_tracking_m->find($analisis->id_analisis_tracking);
 
-        $button_tambah_conto = TRUE;
-        if($count_conto_selesai == count($analisis->jumlah_conto))
+        $all_metoda = '';
+
+        // jika belum di preparasi
+        if(empty($last_track))
         {
-            $button_tambah_conto = FALSE;
+            $this->session->set_flashdata('error_message', 'Belum dapat melakukan Analisis '. $analisis->nomor_analisis);
+            redirect('analisis/lab/' . $analisis->id_lab);
+        }
+
+        $button_tambah_conto = FALSE;
+        $button_terima_conto = FALSE;
+        $button_identifikasi_parameter = FALSE;
+        $button_simpan_di_buku_induk = FALSE;
+        $button_group_analisis = FALSE;
+        $button_mengolah_data_analisis = FALSE;
+        $button_selesai_analisis = FALSE;
+        $array_type_analisis = [];
+        $array_button_analisis = [];
+        $array_button_analisis_selesai = [];
+
+        if(!$analisis->is_selesai)
+        {
+            // if the analisis is not using preparasi
+            if(!$analisis->preparasi)
+            {
+                $button_terima_conto = TRUE;
+
+                if($last_track->id_kegiatan == 3 )
+                {
+                    $button_terima_conto = TRUE;
+                }
+            }
+
+            // jika kegiatan sebelumnya menyerahkan conto dari preparasi
+            if($last_track->id_kegiatan == 4)
+            {
+                $button_terima_conto = FALSE;
+                $button_identifikasi_parameter = TRUE;
+                $button_mengolah_data_analisis = FALSE;
+            }
+
+            // jika kegiatan sebelumnya mengidentifikasi parameter analisis
+            if($last_track->id_kegiatan == 5)
+            {
+                $button_terima_conto = FALSE;
+                $button_simpan_di_buku_induk = TRUE;
+                $button_mengolah_data_analisis = FALSE;
+            }
+
+            // jika kegiatan sudah selesai simpan di buku induk
+            if($last_track->id_kegiatan == 6)
+            {
+                $button_terima_conto = FALSE;
+                $button_group_analisis = TRUE;
+                $button_mengolah_data_analisis = FALSE;
+            }
+
+            if($count_conto_added == $analisis->jumlah_conto)
+            {
+                $button_tambah_conto = FALSE;
+            }
+
+            if($button_group_analisis)
+            {
+                $array_type_analisis = $this->analisis_m->type_analisis($analisis->id);
+
+                foreach($array_type_analisis as $key => $row_type_analisis)
+                {
+
+                    $prosedur = $this->prosedur_m->find_by_type_analisis($row_type_analisis->id_type_analisis);
+                    $prosedur_kegiatan = $this->prosedur_m->prosedur_khusus($prosedur->id);
+                    $array_type_analisis[$key] = [
+                        'id'            => $array_type_analisis[$key],
+                        'kegiatan'      => $prosedur_kegiatan
+                    ];
+
+                    foreach($prosedur_kegiatan as $row_prosedur_kegiatan)
+                    {
+                        $status_button = $this->analisis_tracking_m->by_analisis_and_kegiatan($analisis->id, $row_prosedur_kegiatan->id_kegiatan) ? 1 : 0;
+
+                        $button_analisis = [
+                            'id_kegiatan'       => $row_prosedur_kegiatan->id_kegiatan,
+                            'kegiatan'          => $row_prosedur_kegiatan->kegiatan,
+                            'status'            => $status_button
+                        ];
+
+                        $array_button_analisis[] = $button_analisis;
+
+                        if(!$status_button)
+                        {
+                            $array_button_analisis_selesai[] = $row_prosedur_kegiatan->id_kegiatan;
+                        }
+                    }
+                }
+
+                if(count($array_button_analisis_selesai) == 0)
+                {
+                    $button_mengolah_data_analisis = TRUE;
+                }
+            }
+
+            if($last_track->id_kegiatan == 8)
+            {
+                $button_mengolah_data_analisis = FALSE;
+            }
+
+            if($last_track->id_kegiatan == 9)
+            {
+                $button_mengolah_data_analisis = FALSE;
+                $button_selesai_analisis = TRUE;
+            }
+
+            $button_tambah_conto = TRUE;
+            // if analisis by analis is selesai
+            if($last_track->id_kegiatan == 12)
+            {
+                $button_tambah_conto = FALSE;
+                $button_terima_conto = FALSE;
+                $button_identifikasi_parameter = FALSE;
+                $button_simpan_di_buku_induk = FALSE;
+                $button_mengolah_data_analisis = FALSE;
+                $button_selesai_analisis = FALSE;
+            }
         }
 
         if($this->is_fisika($analisis->id_lab))
@@ -99,29 +231,43 @@ class Analisis extends PS_Controller
             {
                 $type_analisis = $this->type_analisis_m->find($row->id_type_analisis);
                 $parameter_analisis[$key]->nama = $type_analisis->nama;
+                $array_type_analisis[] = $type_analisis->id;
             }
         }
         else
         {
             $page = 'kimia_v';
             $parameter_analisis = $this->analisis_m->parameter($id);
+            $all_metoda = $this->metoda_m->all();
             foreach($parameter_analisis as $key => $row)
             {
-                $parameter = $this->parameter_m->find($row->id_parameter);
+                $parameter = $this->parameter_m->find_type_analisis_parameter($row->id_type_analisis_parameter);
                 $metoda = $this->metoda_m->find($row->id_metoda);
-                $parameter_analisis[$key]->nama = $parameter->nama;
-                $parameter_analisis[$key]->metoda = !$metoda ? '' : $metoda->nama;
+                $parameter_analisis[$key]->nama = $parameter->nama_parameter;
+                $parameter_analisis[$key]->metoda_nama = !$metoda ? '-' : $metoda->nama;
             }
+
         }
 
+        $satuan = $this->reference_m->all('satuan');
+
         $data = array(
-            'title'         =>  $analisis->nomor_analisis,
+            'title'         =>  'Analisis | '.$analisis->nomor_analisis,
             'main_content'  =>  'analisis/lab_type/detail_'.$page,
             'analisis'      =>  $analisis,
             'conto'         =>  $conto,
+            'satuan'        => $satuan,
             'parameter_analisis'        => $parameter_analisis,
             'count_conto_selesai'       => $count_conto_selesai,
-            'button_tambah_conto'       => $button_tambah_conto
+            'count_conto_added'       => $count_conto_added,
+            'button_tambah_conto'       => $button_tambah_conto,
+            'button_terima_conto'       => $button_terima_conto,
+            'button_identifikasi_parameter'       => $button_identifikasi_parameter,
+            'button_mengolah_data_analisis'       => $button_mengolah_data_analisis,
+            'button_simpan_di_buku_induk'         => $button_simpan_di_buku_induk,
+            'button_selesai_analisis'             => $button_selesai_analisis,
+            'group_button_analisis'               => $array_button_analisis,
+            'all_metoda'                          => $all_metoda
         );
 
         $this->load->view('template', $data);
@@ -954,25 +1100,168 @@ class Analisis extends PS_Controller
      * Analisis per Type
      */
 
+    /**
+     * Update Parameter Satuan in Analisis Parameter
+     */
     public function update_parameter_satuan()
     {
-        $this->load->library('form_validation');
-        $this->form_validation->set_rules('satuan', 'required|xss_clean');
+        $input = $this->input->post();
+        $analisis_parameter = (array) $this->analisis_m->find_parameter($input['id']);
+        $analisis_parameter['satuan'] = $this->input->post('satuan');
 
-        if($this->form_validation->run())
+        $this->analisis_m->update_parameter($analisis_parameter);
+        echo $this->input->post('satuan') == 'null' ? 0 : $this->input->post('satuan');
+    }
+
+    /**
+     * Update Parameter Metoda in Analisis Parameter
+     */
+    public function update_parameter_metoda()
+    {
+        $input = $this->input->post();
+        $analisis_parameter = (array) $this->analisis_m->find_parameter($input['id']);
+        $analisis_parameter['id_metoda'] = $this->input->post('id_metoda');
+        $metoda = $this->metoda_m->find($this->input->post('id_metoda'));
+
+        $this->analisis_m->update_parameter($analisis_parameter);
+
+        echo !$metoda ? 0 : $metoda->nama;
+    }
+
+    public function update_parameter_basis()
+    {
+        $input = $this->input->post();
+        $analisis_parameter = (array) $this->analisis_m->find_parameter($input['id']);
+        $analisis_parameter['basis'] = $this->input->post('basis');
+
+        $this->analisis_m->update_parameter($analisis_parameter);
+
+        echo $analisis_parameter['basis'];
+    }
+
+    public function preview_conto($id_analisis)
+    {
+        $analisis = $this->analisis_m->find($id_analisis);
+        if($this->is_fisika($analisis->id_lab))
         {
-            $input = $this->input->post();
-            $analisis_parameter = (array) $this->analisis_m->find_parameter($input['id']);
-            $analisis_parameter['satuan'] = $this->input->post('satuan');
-
-            $this->analisis_m->update_parameter($analisis_parameter);
-            echo 1;
+            $this->_preview_conto_fisika($analisis);
         }
         else
         {
-            echo 0;
+            $this->_preview_conto_kimia($analisis);
         }
+
     }
 
+    private function _preview_conto_fisika($analisis)
+    {
+        $conto = $this->conto_m->by_analisis($analisis->id);
 
+        foreach($conto as $key => $row_conto)
+        {
+            $conto[$key]->detail_parameter = $this->conto_m->parameter($row_conto->id);
+        }
+
+        $data = [
+            'title'             => 'Preview Conto',
+            'main_content'      => 'analisis/preview_conto/fisika_v',
+            'analisis'          => $analisis,
+            'conto'             => $conto
+        ];
+
+        $this->load->view('template', $data);
+    }
+
+    private function _preview_conto_kimia($analisis)
+    {
+        $conto = $this->conto_m->by_analisis($analisis->id);
+
+        $analisis_parameter = $this->analisis_m->parameter($analisis->id);
+
+        foreach($analisis_parameter as $key => $row_parameter)
+        {
+            $parameter = $this->parameter_m->find_type_analisis_parameter($row_parameter->id_type_analisis_parameter);
+            $analisis_parameter[$key]->nama_parameter = $parameter->nama_parameter;
+        }
+
+        foreach($conto as $key => $row_conto)
+        {
+            $conto[$key]->detail_parameter = $this->conto_m->parameter($row_conto->id);
+        }
+
+        $data = [
+            'title'             => 'Preview Conto',
+            'main_content'      => 'analisis/preview_conto/kimia_v',
+            'analisis'          => $analisis,
+            'parameter'         => $analisis_parameter,
+            'conto'             => $conto
+        ];
+
+        $this->load->view('template', $data);
+    }
+
+    public function terima_analisis()
+    {
+        $tracking = new Tracking();
+        $tracking->add_tracking($this->input->post('id'), 4);
+
+        redirect('analisis/detail/' . $this->input->post('id'));
+    }
+
+    public function identifikasi_parameter()
+    {
+        $tracking = new Tracking();
+        $tracking->add_tracking($this->input->post('id'), 5);
+
+        redirect('analisis/detail/' . $this->input->post('id'));
+    }
+
+    public function simpan_di_buku_induk()
+    {
+        $tracking = new Tracking();
+        $tracking->add_tracking($this->input->post('id'), 6);
+
+        redirect('analisis/detail/' . $this->input->post('id'));
+    }
+
+    public function mulai_analisis()
+    {
+        $tracking = new Tracking();
+        $tracking->add_tracking_khusus($this->input->post('id'), $this->input->post('id_kegiatan'));
+
+        redirect('analisis/detail/' . $this->input->post('id'));
+    }
+
+    private function _add_tracking($id_analisis, $id_kegiatan)
+    {
+        $tracking = new Tracking();
+        $tracking->add_tracking($id_analisis, $id_kegiatan);
+    }
+
+    public function add_tracking()
+    {
+        $id_analisis = $this->input->post('id');
+        $id_kegiatan = $this->input->post('id_kegiatan');
+
+        $this->_add_tracking($id_analisis, $id_kegiatan);
+        redirect('analisis/detail/' . $this->input->post('id'));
+    }
+
+    public function set_selesai()
+    {
+        $input = $this->input->post();
+        $input['value'] = TRUE;
+        $this->analisis_m->set_selesai($input);
+
+        redirect('analisis/detail/' . $this->input->post('id'));
+    }
+
+    public function set_unselesai()
+    {
+        $input = $this->input->post();
+        $input['value'] = FALSE;
+        $this->analisis_m->set_selesai($input);
+
+        redirect('analisis/detail/' . $this->input->post('id'));
+    }
 }

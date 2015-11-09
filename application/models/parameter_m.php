@@ -13,9 +13,24 @@ class Parameter_m extends CI_Model
         parent::__construct();
     }
 
+    public function all()
+    {
+        return $this->db->order_by('nama', 'ASC')->get('parameter')->result();
+    }
+
     public function find($id_parameter)
     {
-        return $this->db->where('id_parameter', $id_parameter)->limit(1)->get('parameter')->row();
+        return $this->db->where('id', $id_parameter)->limit(1)->get('parameter')->row();
+    }
+
+    public function find_type_analisis_parameter($id)
+    {
+        return $this->db->select('type_analisis_parameter.*, parameter.nama as nama_parameter, parameter.deskripsi')
+            ->join('parameter', 'parameter.id=type_analisis_parameter.id_parameter')
+            ->where('type_analisis_parameter.id', $id)
+            ->limit(1)
+            ->get('type_analisis_parameter')
+            ->row();
     }
 
     public function by_type_analisis($id_type_analisis)
@@ -53,8 +68,6 @@ class Parameter_m extends CI_Model
     public function insert($input)
     {
         $data = array(
-            'id_type_analisis'  => $input['id_type'],
-            'id_parameter'      => $input['id_parameter'],
             'harga'             => $input['harga'],
             'nama'              => $input['nama'],
             'satuan'            => $input['satuan'],

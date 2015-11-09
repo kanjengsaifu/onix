@@ -5,7 +5,7 @@
  * Date: 10/1/13
  * Time: 7:57 AM
  */
-class Cetak extends CI_Controller
+class Cetak extends PS_Controller
 {
 
     public function __construct()

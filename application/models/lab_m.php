@@ -13,6 +13,11 @@ class Lab_m extends CI_Model
         parent::__construct();
     }
 
+    public function all()
+    {
+        return $this->db->get('laboratorium')->result();
+    }
+
     public function get_all()
     {
         $q = $this->db->query("SELECT id_lab,nama FROM laboratorium");
@@ -50,7 +55,7 @@ class Lab_m extends CI_Model
      * @param $id_komoditi
      * @return mixed
      */
-    public function lab_by_komoditi($id_komoditi)
+    public function by_komoditi($id_komoditi)
     {
         return $this->db->where('id_komoditi', $id_komoditi)->get('laboratorium')->result();
     }
