@@ -15,7 +15,7 @@
 |
 */
 //$config['base_url']	= 'http://192.168.1.14/psdg/';
-$config['base_url']	= 'http://localhost/psdg/';
+$config['base_url']	= 'http://localhost/labpsdg/';
 
 /*
 |--------------------------------------------------------------------------

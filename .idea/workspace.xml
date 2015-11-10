@@ -26,63 +26,46 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="detail_v.php" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/application/views/permohonan/detail_v.php">
+      <file leaf-file-name="config.php" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/application/config/config.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="69" column="45" selection-start="2834" selection-end="2834" vertical-scroll-proportion="-25.333334" vertical-offset="558" max-vertical-offset="6714">
-              <folding>
-                <element signature="n#style#0;n#i#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#1;n#div#2;n#!!top" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="sertifikat_v.php" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/application/views/sertifikat/sertifikat_v.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="70" column="25" selection-start="1315" selection-end="1315" vertical-scroll-proportion="0.73144877" vertical-offset="756" max-vertical-offset="5238">
+            <state line="17" column="47" selection-start="579" selection-end="579" vertical-scroll-proportion="-11.333333" vertical-offset="0" max-vertical-offset="6642">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="unleashed_helper.php" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/application/helpers/unleashed_helper.php">
+      <file leaf-file-name="main.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/assets/js/main.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="489" column="9" selection-start="10807" selection-end="10807" vertical-scroll-proportion="-10.407408" vertical-offset="8413" max-vertical-offset="9018">
-              <folding>
-                <marker date="1429896564616" expanded="true" signature="1284:1304" placeholder="SELECT * FRO..." />
-                <marker date="1429896564616" expanded="true" signature="1755:1798" placeholder="SELECT * FRO..$table WHERE..." />
-                <marker date="1429896564616" expanded="true" signature="2131:2182" placeholder="SELECT * FRO..$table WHERE..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="form_helper.php" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/system/helpers/form_helper.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="761" column="13" selection-start="16184" selection-end="16184" vertical-scroll-proportion="-5.4444447" vertical-offset="13551" max-vertical-offset="19080">
-              <folding>
-                <marker date="1375127698000" expanded="false" signature="2101:2113" placeholder="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="permohonan.php" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/application/controllers/permohonan.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="895" column="65" selection-start="29578" selection-end="29578" vertical-scroll-proportion="-18.74074" vertical-offset="15604" max-vertical-offset="16290">
+            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="2370" max-vertical-offset="2988">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="permohonan_m.php" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/application/models/permohonan_m.php">
+      <file leaf-file-name="plugins.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/assets/js/plugins.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="83" column="60" selection-start="2192" selection-end="2192" vertical-scroll-proportion="-13.888889" vertical-offset="1119" max-vertical-offset="1710">
+            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="3726" max-vertical-offset="11862">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="actions.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/assets/js/actions.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="5076" max-vertical-offset="10278">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="labs.js" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/assets/js/labs.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="5" column="46" selection-start="200" selection-end="200" vertical-scroll-proportion="0.14876033" vertical-offset="0" max-vertical-offset="15606">
               <folding />
             </state>
           </provider>
@@ -126,7 +109,6 @@
         <option value="$PROJECT_DIR$/application/models/analisis_m.php" />
         <option value="$PROJECT_DIR$/application/views/conto/detail_conto_fisika_v.php" />
         <option value="$PROJECT_DIR$/application/views/permohonan/detail_conto_fisika_v.php" />
-        <option value="$PROJECT_DIR$/application/config/config.php" />
         <option value="$PROJECT_DIR$/application/views/conto/form_isi/fisika/fmbmn.php" />
         <option value="$PROJECT_DIR$/application/views/conto/form_isi/fisika/fmbpb.php" />
         <option value="$PROJECT_DIR$/application/views/conto/form_isi/fisika/fmbim.php" />
@@ -140,7 +122,6 @@
         <option value="$PROJECT_DIR$/application/views/template_input.php" />
         <option value="$PROJECT_DIR$/application/views/permohonan/conto_v.php" />
         <option value="$PROJECT_DIR$/application/views/conto/form_isi/kimia.php" />
-        <option value="$PROJECT_DIR$/assets/js/labs.js" />
         <option value="$PROJECT_DIR$/application/views/conto/detail_conto_kimia_v.php" />
         <option value="$PROJECT_DIR$/application/models/pemohon_m.php" />
         <option value="$PROJECT_DIR$/application/controllers/pemohon.php" />
@@ -149,15 +130,17 @@
         <option value="$PROJECT_DIR$/application/models/permohonan_m.php" />
         <option value="$PROJECT_DIR$/application/views/permohonan/detail_v.php" />
         <option value="$PROJECT_DIR$/application/views/sertifikat/sertifikat_v.php" />
+        <option value="$PROJECT_DIR$/application/config/config.php" />
+        <option value="$PROJECT_DIR$/assets/js/labs.js" />
       </list>
     </option>
   </component>
   <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" interpreter_name="PHP" />
   <component name="ProjectFrameBounds">
-    <option name="x" value="-1317" />
-    <option name="y" value="24" />
+    <option name="x" value="49" />
+    <option name="y" value="-4" />
     <option name="width" value="1317" />
-    <option name="height" value="744" />
+    <option name="height" value="772" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -190,27 +173,59 @@
         <subPane>
           <PATH>
             <PATH_ELEMENT>
-              <option name="myItemId" value="psdg" />
+              <option name="myItemId" value="labpsdg" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
-              <option name="myItemId" value="psdg" />
+              <option name="myItemId" value="labpsdg" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="psdg" />
+              <option name="myItemId" value="labpsdg" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
-              <option name="myItemId" value="psdg" />
+              <option name="myItemId" value="labpsdg" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="psdg" />
+              <option name="myItemId" value="labpsdg" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="assets" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="labpsdg" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="labpsdg" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="assets" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="js" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="labpsdg" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="labpsdg" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -220,51 +235,11 @@
           </PATH>
           <PATH>
             <PATH_ELEMENT>
-              <option name="myItemId" value="psdg" />
+              <option name="myItemId" value="labpsdg" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="psdg" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="application" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="views" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="psdg" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="psdg" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="application" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="views" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="sertifikat" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="psdg" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="psdg" />
+              <option name="myItemId" value="labpsdg" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -273,6 +248,24 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="controllers" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="labpsdg" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="labpsdg" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="application" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="config" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -366,15 +359,15 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-1317" y="24" width="1317" height="744" extended-state="6" />
-    <editor active="true" />
+    <frame x="49" y="-4" width="1317" height="772" extended-state="6" />
+    <editor active="false" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3287037" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.21793863" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.22580644" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39969134" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.329927" sideWeight="0.5" order="11" side_tool="true" content_ui="tabs" />
@@ -409,26 +402,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/application/views/permohonan/preview_v.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="92" column="30" selection-start="4601" selection-end="4601" vertical-scroll-proportion="0.41930115" vertical-offset="1404" max-vertical-offset="3204" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/libraries/prosedur.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="202" column="20" selection-start="4780" selection-end="4780" vertical-scroll-proportion="0.33224756" vertical-offset="3342" max-vertical-offset="4734" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/controllers/metoda.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="75" column="53" selection-start="1848" selection-end="1848" vertical-scroll-proportion="2.1140065" vertical-offset="52" max-vertical-offset="1656" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/config/config.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="248" column="39" selection-start="8736" selection-end="8736" vertical-scroll-proportion="0.6742671" vertical-offset="4050" max-vertical-offset="6642" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/application/views/permohonan/detail_conto_fisika_v.php">
       <provider selected="true" editor-type-id="text-editor">
         <state line="68" column="30" selection-start="3230" selection-end="3230" vertical-scroll-proportion="-45.333332" vertical-offset="0" max-vertical-offset="1440" />
@@ -462,11 +435,6 @@
     <entry file="file://$PROJECT_DIR$/application/views/type_analisis/detail_type_analisis_v.php">
       <provider selected="true" editor-type-id="text-editor">
         <state line="100" column="52" selection-start="4377" selection-end="4377" vertical-scroll-proportion="-10.666667" vertical-offset="1512" max-vertical-offset="3114" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/models/conto_m.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="254" column="32" selection-start="7388" selection-end="7388" vertical-scroll-proportion="-6.8070173" vertical-offset="4184" max-vertical-offset="5292" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/application/views/sertifikat/type/kimia.php">
@@ -532,11 +500,6 @@
     <entry file="file://$PROJECT_DIR$/application/views/permohonan/conto_v.php">
       <provider selected="true" editor-type-id="text-editor">
         <state line="50" column="38" selection-start="2152" selection-end="2152" vertical-scroll-proportion="0.2512479" vertical-offset="749" max-vertical-offset="1692" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/assets/js/labs.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="842" column="29" selection-start="26283" selection-end="26283" vertical-scroll-proportion="0.0" vertical-offset="15008" max-vertical-offset="15606" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/application/views/conto/form_isi/kimia.php">
@@ -628,64 +591,82 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/application/views/sertifikat/conto_excel/excel_fmbbj.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="48" column="43" selection-start="1139" selection-end="1139" vertical-scroll-proportion="0.67343485" vertical-offset="358" max-vertical-offset="972">
-          <folding />
-        </state>
+        <state line="48" column="43" selection-start="1139" selection-end="1139" vertical-scroll-proportion="0.67343485" vertical-offset="358" max-vertical-offset="972" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/application/views/analisis/analisis_v.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1908">
-          <folding />
-        </state>
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1908" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/application/controllers/permohonan.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="895" column="65" selection-start="29578" selection-end="29578" vertical-scroll-proportion="-18.74074" vertical-offset="15604" max-vertical-offset="16290">
-          <folding />
-        </state>
+        <state line="895" column="65" selection-start="29578" selection-end="29578" vertical-scroll-proportion="0.0" vertical-offset="15604" max-vertical-offset="16290" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/application/models/permohonan_m.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="83" column="60" selection-start="2192" selection-end="2192" vertical-scroll-proportion="-13.888889" vertical-offset="1119" max-vertical-offset="1710">
-          <folding />
-        </state>
+        <state line="83" column="60" selection-start="2192" selection-end="2192" vertical-scroll-proportion="0.0" vertical-offset="1119" max-vertical-offset="1710" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/system/helpers/form_helper.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="761" column="13" selection-start="16184" selection-end="16184" vertical-scroll-proportion="-5.4444447" vertical-offset="13551" max-vertical-offset="19080">
-          <folding>
-            <marker date="1375127698000" expanded="false" signature="2101:2113" placeholder="..." />
-          </folding>
-        </state>
+        <state line="761" column="13" selection-start="16184" selection-end="16184" vertical-scroll-proportion="0.0" vertical-offset="13551" max-vertical-offset="19080" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/application/helpers/unleashed_helper.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="489" column="9" selection-start="10807" selection-end="10807" vertical-scroll-proportion="-10.407408" vertical-offset="8413" max-vertical-offset="9018">
-          <folding>
-            <marker date="1429896564616" expanded="true" signature="1284:1304" placeholder="SELECT * FRO..." />
-            <marker date="1429896564616" expanded="true" signature="1755:1798" placeholder="SELECT * FRO..$table WHERE..." />
-            <marker date="1429896564616" expanded="true" signature="2131:2182" placeholder="SELECT * FRO..$table WHERE..." />
-          </folding>
-        </state>
+        <state line="489" column="9" selection-start="10807" selection-end="10807" vertical-scroll-proportion="0.0" vertical-offset="8802" max-vertical-offset="9126" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/application/views/permohonan/detail_v.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="69" column="45" selection-start="2834" selection-end="2834" vertical-scroll-proportion="-25.333334" vertical-offset="558" max-vertical-offset="6714">
-          <folding>
-            <element signature="n#style#0;n#i#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#1;n#div#2;n#!!top" expanded="true" />
-          </folding>
-        </state>
+        <state line="69" column="45" selection-start="2834" selection-end="2834" vertical-scroll-proportion="0.0" vertical-offset="558" max-vertical-offset="6714" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/application/views/sertifikat/sertifikat_v.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="70" column="25" selection-start="1315" selection-end="1315" vertical-scroll-proportion="0.73144877" vertical-offset="756" max-vertical-offset="5238">
+        <state line="70" column="25" selection-start="1315" selection-end="1315" vertical-scroll-proportion="3.3333333" vertical-offset="1260" max-vertical-offset="5238" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/models/conto_m.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="240" column="33" selection-start="7035" selection-end="7035" vertical-scroll-proportion="2.384083" vertical-offset="2942" max-vertical-offset="5292">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/config/config.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="17" column="47" selection-start="579" selection-end="579" vertical-scroll-proportion="-11.333333" vertical-offset="0" max-vertical-offset="6642">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/assets/js/main.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2988">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/assets/js/plugins.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="11862">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/assets/js/actions.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="10278">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/assets/js/labs.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="5" column="46" selection-start="200" selection-end="200" vertical-scroll-proportion="0.14876033" vertical-offset="0" max-vertical-offset="15606">
           <folding />
         </state>
       </provider>

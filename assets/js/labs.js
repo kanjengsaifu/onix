@@ -1,9 +1,9 @@
 
-var link = "http://localhost/psdg/analisis/";
-var base_url = "http://localhost/psdg/";
+var link = "http://localhost/labpsdg/analisis/";
+var base_url = "http://localhost/labpsdg/";
 
-    // var link = "http://192.168.1.14/psdg/analisis/";
-    // var base_url = "http://192.168.1.14/psdg/";
+    // var link = "http://192.168.1.14/labpsdg/analisis/";
+    // var base_url = "http://192.168.1.14/labpsdg/";
 
     /**
      * Lokasi
