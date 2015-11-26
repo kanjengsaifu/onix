@@ -1153,6 +1153,35 @@ class Analisis extends Petugas_controller
 
     }
 
+    public function update_all_conto($id_analisis)
+    {
+        $analisis = $this->analisis_m->find($id_analisis);
+        $conto = $this->conto_m->by_analisis($id_analisis);
+
+        $analisis_parameter = $this->analisis_m->parameter($id_analisis);
+
+        foreach($analisis_parameter as $key => $row_parameter)
+        {
+            $parameter = $this->parameter_m->find_type_analisis_parameter($row_parameter->id_type_analisis_parameter);
+            $analisis_parameter[$key]->nama_parameter = $parameter->nama_parameter;
+        }
+
+        foreach($conto as $key => $row_conto)
+        {
+            $conto[$key]->detail_parameter = $this->conto_m->parameter($row_conto->id);
+        }
+
+        $data = [
+            'title'             => 'Update semua Conto',
+            'main_content'      => 'analisis/preview_conto/update_all_kimia_v',
+            'analisis'          => $analisis,
+            'parameter'         => $analisis_parameter,
+            'conto'             => $conto
+        ];
+
+        $this->load->view('template', $data);
+    }
+
     private function _preview_conto_fisika($analisis)
     {
         $conto = $this->conto_m->by_analisis($analisis->id);

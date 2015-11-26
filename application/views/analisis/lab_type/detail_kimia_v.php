@@ -127,6 +127,9 @@
                 <div class="panel-title">Conto</div>
                 <ul class="panel-controls">
                     <li>
+                        <a href="<?php echo base_url('analisis/update_all_conto/' . $analisis->id); ?>" data-toggle="tooltip" data-placement="top" data-original-title="Update Semua Conto"><span class="fa fa-edit"></span></a>
+                    </li>
+                    <li>
                         <a href="<?php echo base_url('analisis/preview_conto/' . $analisis->id); ?>" data-toggle="tooltip" data-placement="top" data-original-title="Preview Conto"><span class="fa fa-search"></span></a>
                     </li>
                 </ul>
