@@ -51,6 +51,9 @@
 <li class="<?php set_active_class($this->uri->segment(1), 'lokasi'); ?>">
     <a href="<?php echo base_url('lokasi'); ?>"><i class="fa fa-location-arrow"></i> <span class="xn-text"> Lokasi</span></a>
 </li>
+<li class="<?php set_active_class($this->uri->segment(1), 'reference'); ?>">
+    <a href="<?php echo base_url('reference'); ?>"><i class="fa fa-leaf"></i> <span class="xn-text"> Reference</span></a>
+</li>
 <!--<li class="--><?php //set_active_class($this->uri->segment(1), 'pengaturan'); ?><!--">-->
 <!--    <a href="--><?php //echo base_url('pengaturan'); ?><!--"><i class="fa fa-gear"></i> <span class="xn-text"> Pengaturan</span></a>-->
 <!--</li>-->
