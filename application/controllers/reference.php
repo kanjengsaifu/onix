@@ -11,12 +11,12 @@ class Reference extends PS_Controller
 
     public function index()
     {
-        $satuan = $this->reference_m->all('ref_satuan');
-        $mineral = $this->reference_m->all('ref_mineral');
+        $satuan = $this->reference_m->all('satuan');
+        $mineral = $this->reference_m->all('mineral');
 
         $data = [
-            'title'         => 'Satuan',
-            'main_content'  => 'satuan/satuan_v',
+            'title'         => 'Reference',
+            'main_content'  => 'reference/reference_v',
             'satuan'        => $satuan,
             'mineral'        => $mineral
         ];
@@ -24,41 +24,38 @@ class Reference extends PS_Controller
         $this->load->view('template', $data);
     }
 
-    public function create()
+    public function create($table)
     {
         $this->load->library('form_validation');
 
-        $lab = $this->lab_m->all();
+        $this->form_validation->set_rules(
+                    'deskripsi',
+                    'Deskripsi',
+                    'required|trim|xss_clean|is_unique[ref_'.$table.'.deskripsi]'
+        );
 
         if($this->form_validation->run() != FALSE)
         {
-            $insert = $this->metoda_m->insert($this->input->post());
+            $insert = $this->reference_m->insert($table, $this->input->post());
 
-            redirect('metoda/detail/' . $insert);
+            redirect('reference');
         }
         else
         {
-            $data = [
-                'title'         => 'Metoda',
-                'main_content'  => 'metoda/t_metoda_v',
-                'lab'           => $lab
-            ];
-
-            $this->load->view('template', $data);
+            $this->index();
         }
     }
 
-    public function detail($id)
+    public function detail($table, $id)
     {
         $this->load->library('form_validation');
-        $metoda = $this->metoda_m->find($id);
-        $lab = $this->lab_m->all();
+        $reference = $this->reference_m->find_by_id($table, $id);
 
         $data = [
-            'title'         => 'Metoda',
-            'main_content'  => 'metoda/detail_metoda_v',
-            'metoda'        => $metoda,
-            'lab'           => $lab
+            'title'         => 'Reference',
+            'main_content'  => 'reference/detail_reference_v',
+            'reference'     => $reference,
+            'table'         => $table
         ];
 
         $this->load->view('template', $data);
@@ -68,14 +65,20 @@ class Reference extends PS_Controller
     {
         $this->load->library('form_validation');
 
-        if($this->form_validation->run('metoda/create') != FALSE)
+        $this->form_validation->set_rules(
+            'deskripsi',
+            'Deskripsi',
+            'required|trim|xss_clean|is_unique[ref_'.$this->input->post('table').'.deskripsi]'
+        );
+
+        if($this->form_validation->run() != FALSE)
         {
-            $this->metoda_m->update($this->input->post());
-            redirect('metoda/detail/' . $this->input->post('id'));
+            $this->reference_m->update($this->input->post('table'), $this->input->post());
+            redirect('reference');
         }
         else
         {
-            $this->detail($this->input->post('id'));
+            $this->detail($this->input->post('table'), $this->input->post('id'));
         }
     }
 }
